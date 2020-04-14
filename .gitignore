@@ -43,3 +43,6 @@ build/
 .vscode/
 
 .DS_Store
+
+application.properties
+configprops.properties
