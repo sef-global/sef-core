@@ -1,5 +1,6 @@
 package org.sefglobal.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Setter(AccessLevel.PUBLIC)
 @Getter(AccessLevel.PUBLIC)
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Ambassador extends AuditModel {
 
     @Id
@@ -32,6 +34,10 @@ public class Ambassador extends AuditModel {
     @NotNull
     @Column(name = "status", length = 10)
     private String status = "ACTIVE";
+
+    public long getId() {
+        return id;
+    }
 
     public void setUniversity(University university) {
         this.university = university;

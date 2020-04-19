@@ -3,8 +3,7 @@ package org.sefglobal.core.model;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.sefglobal.core.model.identity.EngagementIdentity;
 
 import javax.persistence.*;
 
@@ -13,18 +12,10 @@ import javax.persistence.*;
 @Getter(AccessLevel.PUBLIC)
 public class Engagement extends AuditModel {
 
-    @Id
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Event event;
+    @EmbeddedId
+    EngagementIdentity engagementIdentity;
 
-    @Id
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Ambassador ambassador;
-
-    @Id
-    private String hash;
+    public void setEngagementIdentity(EngagementIdentity engagementIdentity) {
+        this.engagementIdentity = engagementIdentity;
+    }
 }

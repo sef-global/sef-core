@@ -26,4 +26,12 @@ public class Event extends AuditModel {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date time;
+
+    @NotNull
+    @Column(length = 10)
+    private String status = "ACTIVE";
+
+    public String getLink() {
+        return link;
+    }
 }

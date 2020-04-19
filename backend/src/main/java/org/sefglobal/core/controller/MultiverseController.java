@@ -3,6 +3,7 @@ package org.sefglobal.core.controller;
 import org.sefglobal.core.exception.ResourceNotFoundException;
 import org.sefglobal.core.model.Ambassador;
 import org.sefglobal.core.model.Event;
+import org.sefglobal.core.model.Link;
 import org.sefglobal.core.model.University;
 import org.sefglobal.core.repository.AmbassadorRepository;
 import org.sefglobal.core.repository.EventRepository;
@@ -10,24 +11,24 @@ import org.sefglobal.core.repository.UniversityRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Base64;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
+@RequestMapping("/multiverse")
 public class MultiverseController {
-    Logger logger = LoggerFactory.getLogger(MultiverseController.class);
+
+    final Logger logger = LoggerFactory.getLogger(MultiverseController.class);
     @Autowired
     UniversityRepository universityRepository;
-
     @Autowired
     AmbassadorRepository ambassadorRepository;
-
     @Autowired
     EventRepository eventRepository;
 
@@ -101,4 +102,22 @@ public class MultiverseController {
     //todo: Implement an endpoint to update an event
     //todo: Implement an endpoint to delete an event (change active status)
 
+    @GetMapping("/events/{id}/links")
+    public List<Link> getEventLinks(@PathVariable long id) throws ResourceNotFoundException {
+        if (eventRepository.existsByIdAndStatus(id, "ACTIVE")) {
+            List<Ambassador> ambassadors = ambassadorRepository.findAllByStatus("ACTIVE");
+            List<Link> links = new ArrayList<>();
+            for (Ambassador ambassador: ambassadors) {
+                Link link = new Link();
+                link.setAmbassador(ambassador);
+                link.generateToken(id);
+                links.add(link);
+            }
+            return links;
+        } else {
+            String message = "Event does not exists for event id : " + id;
+            logger.error(message);
+            throw new ResourceNotFoundException(message);
+        }
+    }
 }
