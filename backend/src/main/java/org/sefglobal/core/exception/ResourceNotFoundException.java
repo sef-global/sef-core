@@ -1,12 +1,11 @@
-package org.sefglobal.admin.exception;
+package org.sefglobal.core.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 // Exception to throw when resource not found with 404 code
-
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
-public class ResourceNotFoundException extends AdminAPIException {
+public class ResourceNotFoundException extends APIException {
 
     public ResourceNotFoundException() {
         super();
