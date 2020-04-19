@@ -1,5 +1,6 @@
 package org.sefglobal.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Setter(AccessLevel.PUBLIC)
 @Getter(AccessLevel.PUBLIC)
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class University extends AuditModel {
 
     @Id
