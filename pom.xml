@@ -6,7 +6,7 @@
 	<artifactId>core</artifactId>
 	<packaging>pom</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>sef-admin</name>
+	<name>sef-core</name>
 	<modules>
 		<module>frontend</module>
 		<module>backend</module>
