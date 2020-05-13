@@ -6,6 +6,7 @@ import {
   AreaChartOutlined,
   DownOutlined,
   BankOutlined,
+  GlobalOutlined,
 } from '@ant-design/icons';
 import { Switch, Link } from 'react-router-dom';
 import RouteWithSubRoutes from '../../components/RouteWithSubRoutes';
@@ -37,17 +38,27 @@ class Home extends React.Component<HomeProps> {
               </div>
             </Link>
           </div>
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-            <Menu.Item key="1" icon={<AreaChartOutlined />}>
+          <Menu theme="dark" mode="inline" defaultOpenKeys={['multiverse']}>
+            <Menu.Item key="dashboard" icon={<AreaChartOutlined />}>
               <Link to="/dashboard/home/" className={styles.txtWhite}>
                 Dashboard
               </Link>
             </Menu.Item>
-            <Menu.Item key="2" icon={<BankOutlined />}>
-              <Link to="/dashboard/universities/" className={styles.txtWhite}>
-                Universities
-              </Link>
-            </Menu.Item>
+            <Menu.SubMenu
+              key="multiverse"
+              icon={<GlobalOutlined />}
+              title="Multiverse"
+            >
+              <Menu.Item icon={<BankOutlined />}>
+                <Link
+                  key="multiverse_universities"
+                  to="/dashboard/universities/"
+                  className={styles.txtWhite}
+                >
+                  Universities
+                </Link>
+              </Menu.Item>
+            </Menu.SubMenu>
           </Menu>
         </Sider>
         <Layout>
