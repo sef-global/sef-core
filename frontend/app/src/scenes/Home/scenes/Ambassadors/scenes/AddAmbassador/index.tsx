@@ -11,12 +11,12 @@ import {
   Spin,
   Avatar,
 } from 'antd';
-import mainStyles from '../../styles.css';
+import mainStyles from '../../../../styles.css';
 import styles from './styles.css';
 import axios, { AxiosResponse } from 'axios';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { handleApiError } from '../../../../services/util/errorHandler';
-import { University } from '../Universities';
+import { handleApiError } from '../../../../../../services/util/errorHandler';
+import { University } from '../../../Universities';
 import SearchUniversity from './components/SearchUniversity';
 
 const { Title, Text } = Typography;

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Modal, Table, Spin, Button, Avatar, Typography } from 'antd';
-import { University } from '../../../Universities';
+import { University } from '../../../../../Universities';
 import axios, { AxiosResponse } from 'axios';
-import { handleApiError } from '../../../../../../services/util/errorHandler';
+import { handleApiError } from '../../../../../../../../services/util/errorHandler';
 
 const { Title } = Typography;
 

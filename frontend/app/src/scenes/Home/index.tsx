@@ -7,6 +7,7 @@ import {
   DownOutlined,
   BankOutlined,
   GlobalOutlined,
+  TeamOutlined,
 } from '@ant-design/icons';
 import { Switch, Link } from 'react-router-dom';
 import RouteWithSubRoutes from '../../components/RouteWithSubRoutes';
@@ -56,6 +57,15 @@ class Home extends React.Component<HomeProps> {
                   className={styles.txtWhite}
                 >
                   Universities
+                </Link>
+              </Menu.Item>
+              <Menu.Item icon={<TeamOutlined />}>
+                <Link
+                  key="multiverse_ambassadors"
+                  to="/dashboard/ambassadors/"
+                  className={styles.txtWhite}
+                >
+                  Ambassadors
                 </Link>
               </Menu.Item>
             </Menu.SubMenu>
