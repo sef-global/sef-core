@@ -7,8 +7,9 @@ import Login from './scenes/Login';
 import Home from './scenes/Home';
 import Dashboard from './scenes/Home/scenes/Dashboard';
 import Universities from './scenes/Home/scenes/Universities';
+import Ambassadors from './scenes/Home/scenes/Ambassadors';
 import AddUniversity from './scenes/Home/scenes/Universities/scenes/AddUniversity';
-import AddAmbassador from './scenes/Home/scenes/AddAmbassador';
+import AddAmbassador from './scenes/Home/scenes/Ambassadors/scenes/AddAmbassador';
 
 export interface SingleRoute {
   path: string;
@@ -37,6 +38,11 @@ const routes: SingleRoute[] = [
         path: '/dashboard/universities',
         exact: true,
         component: Universities,
+      },
+      {
+        path: '/dashboard/ambassadors',
+        exact: true,
+        component: Ambassadors,
       },
       {
         path: '/dashboard/universities/add',
