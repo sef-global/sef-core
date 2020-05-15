@@ -28,4 +28,8 @@ public class University extends AuditModel {
     @NotNull
     @Column(name = "status", length = 10)
     private String status = "ACTIVE";
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

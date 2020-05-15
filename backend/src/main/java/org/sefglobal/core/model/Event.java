@@ -34,4 +34,8 @@ public class Event extends AuditModel {
     public String getLink() {
         return link;
     }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

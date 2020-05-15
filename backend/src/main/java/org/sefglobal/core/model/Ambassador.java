@@ -42,4 +42,8 @@ public class Ambassador extends AuditModel {
     public void setUniversity(University university) {
         this.university = university;
     }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

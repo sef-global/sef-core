@@ -17,8 +17,6 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/multiverse")
@@ -59,7 +57,17 @@ public class MultiverseController {
         }
     }
 
-    //todo: Implement an endpoint to delete university (change active status)
+    @DeleteMapping("/universities/{id}")
+    public University deleteUniversity(@PathVariable long id) throws ResourceNotFoundException {
+        if (universityRepository.existsById(id)) {
+            universityRepository.getOne(id).setStatus("REMOVED");
+            return universityRepository.save(universityRepository.getOne(id));
+        } else {
+            String message = "University does not exists for university id : " + id;
+            logger.error(message);
+            throw new ResourceNotFoundException(message);
+        }
+    }
 
     @GetMapping("/ambassadors")
     public Iterable<Ambassador> listAmbassador() {
@@ -80,9 +88,40 @@ public class MultiverseController {
         }).orElseThrow(() -> new ResourceNotFoundException("University not found"));
     }
 
-    //todo: Implement an endpoint to list all ambassadors in a university
-    //todo: Implement an endpoint to delete ambassador (change active status)
-    //todo: Implement an endpoint to update ambassador
+    @GetMapping("/universities/{id}/ambassadors")
+    public Iterable<Ambassador> listAmbassadorsInUniversity(@PathVariable long id) throws ResourceNotFoundException {
+        if (universityRepository.existsById(id)) {
+            return ambassadorRepository.findAllByUniversity(universityRepository.getOne(id));
+        } else {
+            String message = "University does not exists for university id : " + id;
+            logger.error(message);
+            throw new ResourceNotFoundException(message);
+        }
+    }
+
+    @DeleteMapping("/ambassadors/{id}")
+    public Ambassador deleteAmbassador(@PathVariable long id) throws ResourceNotFoundException {
+        if (ambassadorRepository.existsById(id)) {
+            ambassadorRepository.getOne(id).setStatus("REMOVED");
+            return ambassadorRepository.save(ambassadorRepository.getOne(id));
+        } else {
+            String message = "Ambassador does not exists for ambassador id : " + id;
+            logger.error(message);
+            throw new ResourceNotFoundException(message);
+        }
+    }
+
+    @PutMapping("/ambassadors/{id}")
+    public Ambassador updateAmbassador(@PathVariable long id,
+            @Valid @RequestBody Ambassador ambassador) throws ResourceNotFoundException {
+        if (ambassadorRepository.existsById(id)) {
+            return ambassadorRepository.save(ambassador);
+        } else {
+            String message = "Ambassador does not exists for ambassador id : " + id;
+            logger.error(message);
+            throw new ResourceNotFoundException(message);
+        }
+    }
 
     @GetMapping("/events")
     public Iterable<Event> listEvents() {
@@ -99,8 +138,29 @@ public class MultiverseController {
         return eventRepository.save(event);
     }
 
-    //todo: Implement an endpoint to update an event
-    //todo: Implement an endpoint to delete an event (change active status)
+    @PutMapping("/events/{id}")
+    public Event updateEvent(@PathVariable long id,
+            @Valid @RequestBody Event event) throws ResourceNotFoundException {
+        if (eventRepository.existsById(id)) {
+            return eventRepository.save(event);
+        } else {
+            String message = "Event does not exists for event id : " + id;
+            logger.error(message);
+            throw new ResourceNotFoundException(message);
+        }
+    }
+
+    @DeleteMapping("/event/{id}")
+    public Event deleteEvent(@PathVariable long id) throws ResourceNotFoundException {
+        if (eventRepository.existsById(id)) {
+            eventRepository.getOne(id).setStatus("REMOVED");
+            return eventRepository.save(eventRepository.getOne(id));
+        } else {
+            String message = "Event does not exists for event id : " + id;
+            logger.error(message);
+            throw new ResourceNotFoundException(message);
+        }
+    }
 
     @GetMapping("/events/{id}/links")
     public List<Link> getEventLinks(@PathVariable long id) throws ResourceNotFoundException {
