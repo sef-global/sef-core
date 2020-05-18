@@ -11,5 +11,4 @@ import java.util.List;
 public interface AmbassadorRepository extends JpaRepository<Ambassador, Long> {
     Ambassador findByIdAndStatus(long id, String status);
     List<Ambassador> findAllByStatus(String status);
-    List<Ambassador> findAllByUniversity (University university);
 }
