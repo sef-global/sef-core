@@ -12,6 +12,7 @@ import org.sefglobal.core.util.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,22 +33,25 @@ public class MultiverseController {
     EventRepository eventRepository;
 
     @GetMapping("/universities")
+    @ResponseStatus(HttpStatus.OK)
     public Iterable<University> listUniversities() {
         return universityRepository.findAll();
     }
 
     @GetMapping("/universities/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public Optional<University> getUniversityById(@PathVariable long id) {
         return universityRepository.findById(id);
     }
 
     @PostMapping("/universities")
+    @ResponseStatus(HttpStatus.CREATED)
     public University createUniversity(@Valid @RequestBody University university) {
         return universityRepository.save(university);
     }
 
     @PutMapping("/universities/{id}")
-    @ResponseStatus()
+    @ResponseStatus(HttpStatus.OK)
     public String updateUniversity(@PathVariable long id,
             @Valid @RequestBody University university) throws ResourceNotFoundException {
         if (universityRepository.existsById(id)) {
@@ -61,7 +65,7 @@ public class MultiverseController {
     }
 
     @DeleteMapping("/universities/{id}")
-    @ResponseStatus()
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteUniversity(@PathVariable long id) throws ResourceNotFoundException {
         Optional<University> university = universityRepository.findById(id);
         if (university.isPresent()) {
@@ -76,16 +80,19 @@ public class MultiverseController {
     }
 
     @GetMapping("/ambassadors")
+    @ResponseStatus(HttpStatus.OK)
     public Iterable<Ambassador> listAmbassador() {
         return ambassadorRepository.findAll();
     }
 
     @GetMapping("/ambassadors/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public Optional<Ambassador> getAmbassadorById(@PathVariable long id) {
         return ambassadorRepository.findById(id);
     }
 
     @PostMapping("/universities/{id}/ambassadors")
+    @ResponseStatus(HttpStatus.CREATED)
     public Ambassador createAmbassador(@PathVariable long id,
             @Valid @RequestBody Ambassador ambassador) throws ResourceNotFoundException {
         return universityRepository.findById(id).map(university -> {
@@ -95,7 +102,7 @@ public class MultiverseController {
     }
 
     @DeleteMapping("/ambassadors/{id}")
-    @ResponseStatus()
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteAmbassador(@PathVariable long id) throws ResourceNotFoundException {
         Optional<Ambassador> ambassador = ambassadorRepository.findById(id);
         if (ambassador.isPresent()) {
@@ -110,7 +117,7 @@ public class MultiverseController {
     }
 
     @PutMapping("/ambassadors/{id}")
-    @ResponseStatus()
+    @ResponseStatus(HttpStatus.OK)
     public String updateAmbassador(@PathVariable long id,
             @Valid @RequestBody Ambassador ambassador) throws ResourceNotFoundException {
         if (ambassadorRepository.existsById(id)) {
@@ -124,22 +131,25 @@ public class MultiverseController {
     }
 
     @GetMapping("/events")
+    @ResponseStatus(HttpStatus.OK)
     public Iterable<Event> listEvents() {
         return eventRepository.findAll();
     }
 
     @GetMapping("/events/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public Optional<Event> getEventById(@PathVariable long id) {
         return eventRepository.findById(id);
     }
 
     @PostMapping("/events")
+    @ResponseStatus(HttpStatus.CREATED)
     public Event createEvent(@Valid @RequestBody Event event) {
         return eventRepository.save(event);
     }
 
     @PutMapping("/events/{id}")
-    @ResponseStatus()
+    @ResponseStatus(HttpStatus.OK)
     public String updateEvent(@PathVariable long id,
             @Valid @RequestBody Event event) throws ResourceNotFoundException {
         if (eventRepository.existsById(id)) {
@@ -153,7 +163,7 @@ public class MultiverseController {
     }
 
     @DeleteMapping("/events/{id}")
-    @ResponseStatus()
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteEvent(@PathVariable long id) throws ResourceNotFoundException {
         Optional<Event> event = eventRepository.findById(id);
         if (event.isPresent()) {
@@ -168,6 +178,7 @@ public class MultiverseController {
     }
 
     @GetMapping("/events/{id}/links")
+    @ResponseStatus(HttpStatus.OK)
     public List<Link> getEventLinks(@PathVariable long id) throws ResourceNotFoundException {
         if (eventRepository.existsByIdAndStatus(id, "ACTIVE")) {
             List<Ambassador> ambassadors = ambassadorRepository.findAllByStatus("ACTIVE");
