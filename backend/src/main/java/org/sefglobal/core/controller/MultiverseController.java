@@ -47,10 +47,12 @@ public class MultiverseController {
     }
 
     @PutMapping("/universities/{id}")
-    public University updateUniversity(@PathVariable long id,
+    @ResponseStatus()
+    public String updateUniversity(@PathVariable long id,
             @Valid @RequestBody University university) throws ResourceNotFoundException {
         if (universityRepository.existsById(id)) {
-            return universityRepository.save(university);
+            universityRepository.save(university);
+            return "Successfully updated. University id : " + id;
         } else {
             String message = "University does not exists for university id : " + id;
             logger.error(message);
@@ -108,10 +110,12 @@ public class MultiverseController {
     }
 
     @PutMapping("/ambassadors/{id}")
-    public Ambassador updateAmbassador(@PathVariable long id,
+    @ResponseStatus()
+    public String updateAmbassador(@PathVariable long id,
             @Valid @RequestBody Ambassador ambassador) throws ResourceNotFoundException {
         if (ambassadorRepository.existsById(id)) {
-            return ambassadorRepository.save(ambassador);
+            ambassadorRepository.save(ambassador);
+            return "Successfully updated. Ambassador id : " + id;
         } else {
             String message = "Ambassador does not exists for ambassador id : " + id;
             logger.error(message);
@@ -135,10 +139,12 @@ public class MultiverseController {
     }
 
     @PutMapping("/events/{id}")
-    public Event updateEvent(@PathVariable long id,
+    @ResponseStatus()
+    public String updateEvent(@PathVariable long id,
             @Valid @RequestBody Event event) throws ResourceNotFoundException {
         if (eventRepository.existsById(id)) {
-            return eventRepository.save(event);
+            eventRepository.save(event);
+            return "Update successful. Event id = " + id;
         } else {
             String message = "Event does not exists for event id : " + id;
             logger.error(message);
