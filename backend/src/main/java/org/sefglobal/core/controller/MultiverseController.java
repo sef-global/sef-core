@@ -8,6 +8,7 @@ import org.sefglobal.core.model.University;
 import org.sefglobal.core.repository.AmbassadorRepository;
 import org.sefglobal.core.repository.EventRepository;
 import org.sefglobal.core.repository.UniversityRepository;
+import org.sefglobal.core.util.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,11 +59,13 @@ public class MultiverseController {
     }
 
     @DeleteMapping("/universities/{id}")
-    public University deleteUniversity(@PathVariable long id) throws ResourceNotFoundException {
-        if (universityRepository.existsById(id)) {
-            University university = universityRepository.getOne(id);
-            university.setStatus("REMOVED");
-            return universityRepository.save(university);
+    @ResponseStatus()
+    public String deleteUniversity(@PathVariable long id) throws ResourceNotFoundException {
+        Optional<University> university = universityRepository.findById(id);
+        if (university.isPresent()) {
+            university.get().setStatus(Status.REMOVED.toString());
+            universityRepository.save(university.get());
+            return "Successfully deleted university with university id : " + id;
         } else {
             String message = "University does not exists for university id : " + id;
             logger.error(message);
@@ -90,11 +93,13 @@ public class MultiverseController {
     }
 
     @DeleteMapping("/ambassadors/{id}")
-    public Ambassador deleteAmbassador(@PathVariable long id) throws ResourceNotFoundException {
-        if (ambassadorRepository.existsById(id)) {
-            Ambassador ambassador = ambassadorRepository.getOne(id);
-            ambassador.setStatus("REMOVED");
-            return ambassadorRepository.save(ambassador);
+    @ResponseStatus()
+    public String deleteAmbassador(@PathVariable long id) throws ResourceNotFoundException {
+        Optional<Ambassador> ambassador = ambassadorRepository.findById(id);
+        if (ambassador.isPresent()) {
+            ambassador.get().setStatus(Status.REMOVED.toString());
+            ambassadorRepository.save(ambassador.get());
+            return "Successfully deleted ambassador with ambassador id : " + id;
         } else {
             String message = "Ambassador does not exists for ambassador id : " + id;
             logger.error(message);
@@ -142,11 +147,13 @@ public class MultiverseController {
     }
 
     @DeleteMapping("/events/{id}")
-    public Event deleteEvent(@PathVariable long id) throws ResourceNotFoundException {
-        if (eventRepository.existsById(id)) {
-            Event event = eventRepository.getOne(id);
-            event.setStatus("REMOVED");
-            return eventRepository.save(event);
+    @ResponseStatus()
+    public String deleteEvent(@PathVariable long id) throws ResourceNotFoundException {
+        Optional<Event> event = eventRepository.findById(id);
+        if (event.isPresent()) {
+            event.get().setStatus(Status.REMOVED.toString());
+            eventRepository.save(event.get());
+            return "Successfully deleted event with event id : " + id;
         } else {
             String message = "Event does not exists for event id : " + id;
             logger.error(message);
