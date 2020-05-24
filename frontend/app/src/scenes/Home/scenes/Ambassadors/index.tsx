@@ -1,9 +1,10 @@
 import React from 'react';
 import { Typography, Table, Row, Col } from 'antd';
-import styles from '../../styles.css';
+import styles from './styles.css';
 import axios, { AxiosResponse } from 'axios';
 import { handleApiError } from '../../../../services/util/errorHandler';
 import { University } from '../Universities';
+import { PaginationProps } from 'antd/lib/pagination';
 const { Title } = Typography;
 
 export interface Ambassador {
@@ -16,6 +17,16 @@ export interface Ambassador {
 interface AmbassadorsStateProps {
   ambassadors: Ambassador[];
   isLoading: boolean;
+  pagination: {
+    current: number,
+    pageSize: number,
+    total: number,
+  };
+}
+
+export interface AmbassadorPayload {
+  content: Ambassador[];
+  totalElements: number;
 }
 
 const columns = [
@@ -23,42 +34,59 @@ const columns = [
     title: 'First Name',
     dataIndex: 'firstName',
     key: 'firstName',
-    // eslint-disable-next-line react/display-name
-    render: (firstName: string) => <Title level={4}>{firstName}</Title>,
   },
   {
     title: 'Last Name',
     dataIndex: 'lastName',
     key: 'lastName',
-    // eslint-disable-next-line react/display-name
-    render: (lastName: string) => <Title level={4}>{lastName}</Title>,
   },
   {
     title: 'University',
     dataIndex: 'university',
     key: 'university',
     // eslint-disable-next-line react/display-name
-    render: (university: University) => (
-      <Title level={4}>{university.name}</Title>
-    ),
+    render: (university: University) => university.name,
   },
 ];
 
 class Ambassadors extends React.Component<{}, AmbassadorsStateProps> {
+  pageSize: number;
   constructor(props: {}) {
     super(props);
+    this.pageSize = 10;
     this.state = {
       isLoading: false,
       ambassadors: [],
+      pagination: {
+        current: 1,
+        total: 0,
+        pageSize: this.pageSize,
+      },
     };
   }
 
-  componentDidMount(): void {
+  componentDidMount() {
+    this.fetchAmbassadors(1);
+  }
+
+  fetchAmbassadors = (pageNo: number) => {
+    const pageNumber = pageNo - 1;
+    this.setState({ isLoading: true });
     axios
-      .get(window.location.origin + '/core/multiverse/ambassadors')
-      .then((result: AxiosResponse<Ambassador[]>) => {
+      .get(
+        window.location.origin +
+          `/core/multiverse/ambassadors?pageNumber=${pageNumber}&limit=${this.pageSize}`
+      )
+      .then((result: AxiosResponse<AmbassadorPayload>) => {
         if (result.status == 200) {
-          this.setState({ isLoading: false, ambassadors: result.data });
+          const pagination = { ...this.state.pagination };
+          pagination.current = pageNo;
+          pagination.total = result.data.totalElements;
+          this.setState({
+            isLoading: false,
+            ambassadors: result.data.content,
+            pagination: pagination,
+          });
         }
       })
       .catch((error) => {
@@ -68,17 +96,27 @@ class Ambassadors extends React.Component<{}, AmbassadorsStateProps> {
         );
         this.setState({ isLoading: false });
       });
-  }
+  };
+
+  handleTableChange = (pagination: PaginationProps) => {
+    if (pagination.current != undefined) {
+      this.fetchAmbassadors(pagination.current);
+    }
+  };
 
   render() {
     return (
-      <Row className={styles.innerContent}>
+      <Row className={styles.content}>
         <Col md={24} lg={{ span: 20, offset: 2 }}>
           <Title>Ambassadors</Title>
           <Table
             rowKey="id"
             columns={columns}
             dataSource={this.state.ambassadors}
+            pagination={this.state.pagination}
+            onChange={this.handleTableChange}
+            loading={this.state.isLoading}
+            className={styles.column}
           />
         </Col>
       </Row>
