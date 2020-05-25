@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.sefglobal.core.util.Status;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -33,7 +34,7 @@ public class Ambassador extends AuditModel {
 
     @NotNull
     @Column(name = "status", length = 10)
-    private String status = "ACTIVE";
+    private String status = Status.ACTIVE.toString();
 
     public long getId() {
         return id;
@@ -41,5 +42,9 @@ public class Ambassador extends AuditModel {
 
     public void setUniversity(University university) {
         this.university = university;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.sefglobal.core.util.Status;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -27,5 +28,9 @@ public class University extends AuditModel {
 
     @NotNull
     @Column(name = "status", length = 10)
-    private String status = "ACTIVE";
+    private String status = Status.ACTIVE.toString();
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }
