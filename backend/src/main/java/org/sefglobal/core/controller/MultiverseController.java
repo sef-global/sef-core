@@ -1,5 +1,6 @@
 package org.sefglobal.core.controller;
 
+import org.hibernate.validator.constraints.Range;
 import org.sefglobal.core.exception.ResourceNotFoundException;
 import org.sefglobal.core.model.Ambassador;
 import org.sefglobal.core.model.Event;
@@ -12,7 +13,11 @@ import org.sefglobal.core.util.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@Validated
 @RequestMapping("/multiverse")
 public class MultiverseController {
 
@@ -81,8 +87,10 @@ public class MultiverseController {
 
     @GetMapping("/ambassadors")
     @ResponseStatus(HttpStatus.OK)
-    public Iterable<Ambassador> listAmbassador() {
-        return ambassadorRepository.findAll();
+    public Page<Ambassador> getAmbassadors(@Range(min = 1, max = 20) @RequestParam int limit,
+            @RequestParam int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber, limit);
+        return ambassadorRepository.findAll(pageable);
     }
 
     @GetMapping("/ambassadors/{id}")
