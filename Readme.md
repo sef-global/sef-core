@@ -4,6 +4,7 @@ This repository contains two modules
 1. Backend 
     Contains the following APIs,
     1. Multiverse Programme
+    2. Academix Project
     
 2. Frontend
     Contains the admin dashboard
