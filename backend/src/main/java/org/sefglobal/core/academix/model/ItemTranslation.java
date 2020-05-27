@@ -1,18 +1,12 @@
-package org.sefglobal.core.model;
+package org.sefglobal.core.academix.model;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.sefglobal.core.model.AuditModel;
+import org.sefglobal.core.model.Language;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "item_translation")
@@ -23,6 +17,7 @@ public class ItemTranslation extends AuditModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "item_id", referencedColumnName = "id", nullable = false)
     private Item item;
