@@ -10,13 +10,7 @@ import Universities from './scenes/Home/scenes/Universities';
 import Ambassadors from './scenes/Home/scenes/Ambassadors';
 import AddUniversity from './scenes/Home/scenes/Universities/scenes/AddUniversity';
 import AddAmbassador from './scenes/Home/scenes/Ambassadors/scenes/AddAmbassador';
-
-export interface SingleRoute {
-  path: string;
-  exact: boolean;
-  component: any;
-  routes?: SingleRoute[];
-}
+import { SingleRoute } from './interfaces';
 
 const routes: SingleRoute[] = [
   {

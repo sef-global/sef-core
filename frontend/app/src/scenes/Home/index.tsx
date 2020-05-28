@@ -11,13 +11,9 @@ import {
 } from '@ant-design/icons';
 import { Switch, Link } from 'react-router-dom';
 import RouteWithSubRoutes from '../../components/RouteWithSubRoutes';
-import { SingleRoute } from '../../index';
 import styles from './styles.css';
 import logo from '../../../public/logo.png';
-
-interface HomeProps {
-  routes: SingleRoute[];
-}
+import { HomeProps } from './interfaces';
 
 class Home extends React.Component<HomeProps> {
   render() {

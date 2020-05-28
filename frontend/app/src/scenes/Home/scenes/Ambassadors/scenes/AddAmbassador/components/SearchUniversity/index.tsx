@@ -1,21 +1,14 @@
 import React from 'react';
 import { Modal, Table, Spin, Button, Avatar, Typography } from 'antd';
-import { University } from '../../../../../Universities';
+import { University } from '../../../../../../interfaces';
 import axios, { AxiosResponse } from 'axios';
 import { handleApiError } from '../../../../../../../../services/util/errorHandler';
+import {
+  SearchUniversityProps,
+  SearchUniversityStateProps,
+} from './interfaces';
 
 const { Title } = Typography;
-
-interface SearchUniversityProps {
-  isVisible: boolean;
-  onSelect: (university: University) => void;
-  onCancel: () => void;
-}
-
-interface SearchUniversityStateProps {
-  universities: University[];
-  isLoading: boolean;
-}
 
 class SearchUniversity extends React.Component<
   SearchUniversityProps,
