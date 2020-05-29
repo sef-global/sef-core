@@ -13,17 +13,14 @@ import styles from '../../../../styles.css';
 import axios, { AxiosResponse } from 'axios';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { handleApiError } from '../../../../../../services/util/errorHandler';
-import { University } from '../../index';
+import { University } from '../../../../interfaces';
+import { AddUniversityStateProps } from './interfaces';
 
 const { Title, Text } = Typography;
 const layout = {
   labelCol: { span: 24 },
   wrapperCol: { span: 24 },
 };
-
-interface AddUniversityStateProps {
-  isLoading: boolean;
-}
 
 class AddUniversity extends React.Component<
   RouteComponentProps<any>,

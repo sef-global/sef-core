@@ -3,17 +3,10 @@ import 'antd/dist/antd.less';
 import RouteWithSubRoutes from '../RouteWithSubRoutes';
 import { BrowserRouter as Router, Switch, Redirect } from 'react-router-dom';
 import axios from 'axios';
-import { SingleRoute } from '../../index';
+import { SingleRoute } from '../../interfaces';
 import { notification, Spin } from 'antd';
 import styles from './styles.css';
-
-interface AppProps {
-  routes: SingleRoute[];
-}
-
-interface StateProps {
-  isLoading: boolean;
-}
+import { AppProps, StateProps } from './interfaces';
 
 class App extends React.Component<AppProps, StateProps> {
   constructor(props: AppProps) {

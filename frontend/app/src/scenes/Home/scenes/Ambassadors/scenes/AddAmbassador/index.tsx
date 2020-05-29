@@ -16,8 +16,9 @@ import styles from './styles.css';
 import axios, { AxiosResponse } from 'axios';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { handleApiError } from '../../../../../../services/util/errorHandler';
-import { University } from '../../../Universities';
+import { University } from '../../../../interfaces';
 import SearchUniversity from './components/SearchUniversity';
+import { AddAmbassadorPayload, AddAmbassadorStateProps } from './interfaces';
 
 const { Title, Text } = Typography;
 const { Meta } = Card;
@@ -25,16 +26,6 @@ const layout = {
   labelCol: { span: 24 },
   wrapperCol: { span: 24 },
 };
-
-interface AddAmbassadorStateProps {
-  isLoading: boolean;
-  university: University | null;
-  isSearchUniversityModalVisible: boolean;
-}
-
-interface AddAmbassadorPayload {
-  id: number;
-}
 
 class AddAmbassador extends React.Component<
   RouteComponentProps<any>,

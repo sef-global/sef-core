@@ -3,31 +3,10 @@ import { Typography, Table, Row, Col } from 'antd';
 import styles from './styles.css';
 import axios, { AxiosResponse } from 'axios';
 import { handleApiError } from '../../../../services/util/errorHandler';
-import { University } from '../Universities';
+import { University } from '../../interfaces';
 import { PaginationProps } from 'antd/lib/pagination';
+import { AmbassadorPayload, AmbassadorsStateProps } from './interfaces';
 const { Title } = Typography;
-
-export interface Ambassador {
-  id: number;
-  firstName: string;
-  lastName: string;
-  university: string;
-}
-
-interface AmbassadorsStateProps {
-  ambassadors: Ambassador[];
-  isLoading: boolean;
-  pagination: {
-    current: number,
-    pageSize: number,
-    total: number,
-  };
-}
-
-export interface AmbassadorPayload {
-  content: Ambassador[];
-  totalElements: number;
-}
 
 const columns = [
   {

@@ -3,18 +3,9 @@ import { Typography, Table, Row, Col, Avatar } from 'antd';
 import styles from '../../styles.css';
 import axios, { AxiosResponse } from 'axios';
 import { handleApiError } from '../../../../services/util/errorHandler';
+import { UniversitiesStateProps } from './interfaces';
+import { University } from '../../interfaces';
 const { Title } = Typography;
-
-export interface University {
-  id: number;
-  name: string;
-  imageUrl: string;
-}
-
-interface UniversitiesStateProps {
-  universities: University[];
-  isLoading: boolean;
-}
 
 const columns = [
   {

@@ -11,17 +11,10 @@ import {
 } from 'antd';
 import axios, { AxiosResponse } from 'axios';
 import styles from './styles.css';
+import { LoginPayload, LoginStateProps } from './interfaces';
 
 const { Content } = Layout;
 const { Title, Text } = Typography;
-
-interface LoginPayload {
-  username: string;
-}
-
-interface LoginStateProps {
-  isIncorrect: boolean;
-}
 
 class Login extends React.Component<any, LoginStateProps> {
   constructor(props: any) {

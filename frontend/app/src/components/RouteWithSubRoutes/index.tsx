@@ -1,14 +1,6 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import { SingleRoute } from '../../index';
-
-interface RouteWithSubRoutesProps {
-  path: string;
-  exact: boolean;
-  routes?: SingleRoute[];
-  component: React.ElementRef<any>;
-  key?: string;
-}
+import { RouteWithSubRoutesProps } from './interfaces';
 
 class RouteWithSubRoutes extends React.Component<RouteWithSubRoutesProps> {
   render() {
