@@ -1,16 +1,12 @@
-package org.sefglobal.core.model;
+package org.sefglobal.core.academix.model;
 
-import java.util.Set;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.sefglobal.core.model.AuditModel;
+
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "category")
@@ -22,8 +18,9 @@ public class Category extends AuditModel {
     private Long id;
 
     @OneToMany(mappedBy = "category")
-    private Set<CategoryTranslation> categoryTranslations;
+    private Set<CategoryTranslation> translations;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "category")
     private Set<SubCategory> subCategories;
 

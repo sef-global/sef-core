@@ -1,4 +1,4 @@
-package org.sefglobal.core.model;
+package org.sefglobal.core.academix.model;
 
 import java.util.Set;
 
@@ -14,8 +14,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.sefglobal.core.model.AuditModel;
 
 @Entity
 @Table(name = "sub_category")
@@ -27,8 +29,9 @@ public class SubCategory extends AuditModel {
     private Long id;
 
     @OneToMany(mappedBy = "subCategory")
-    private Set<SubCategoryTranslation> subCategoryTranslations;
+    private Set<SubCategoryTranslation> translations;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(
             name = "category_id",
@@ -36,6 +39,7 @@ public class SubCategory extends AuditModel {
             nullable = false
     ) private Category category;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "sub_category_item_map",

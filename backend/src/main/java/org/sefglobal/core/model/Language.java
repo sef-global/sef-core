@@ -1,15 +1,13 @@
 package org.sefglobal.core.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.sefglobal.core.academix.model.CategoryTranslation;
+import org.sefglobal.core.academix.model.ItemTranslation;
+import org.sefglobal.core.academix.model.SubCategoryTranslation;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "language")
@@ -23,12 +21,15 @@ public class Language extends AuditModel {
     @Column(nullable = false, unique = true)
     private String locale;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "language")
     private CategoryTranslation categoryTranslation;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "language")
     private SubCategoryTranslation subCategoryTranslation;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "language")
     private ItemTranslation itemTranslation;
 
