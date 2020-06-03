@@ -25,4 +25,10 @@ public class SubCategoryController {
     public List<CustomSubCategory> getAllSubCategoriesByCategoryId(@PathVariable Long id) throws ResourceNotFoundException {
         return subCategoryService.getAllSubCategoryByCategory(id);
     }
+
+    @GetMapping("/academix/sub-categories/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public CustomSubCategory getSubCategoryById(@PathVariable Long id) throws ResourceNotFoundException {
+        return subCategoryService.getSubCategoryById(id);
+    }
 }
