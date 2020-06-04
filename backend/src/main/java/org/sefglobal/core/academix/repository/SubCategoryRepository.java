@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface SubCategoryRepository extends JpaRepository<SubCategory, Long> {
     List<CustomSubCategory> getAllByCategory_Id(Long categoryId);
-    Optional<CustomSubCategory> findBy_Id(Long subCategoryId);
+    Optional<CustomSubCategory> findSubCategoryById(Long subCategoryId);
 }
