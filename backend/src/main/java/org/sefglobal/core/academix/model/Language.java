@@ -6,11 +6,11 @@ import lombok.Setter;
 import org.sefglobal.core.model.AuditModel;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "language")
-@Getter
-@Setter
+@Getter @Setter
 public class Language extends AuditModel {
 
     @Id
@@ -21,16 +21,16 @@ public class Language extends AuditModel {
     private String locale;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "language")
-    private CategoryTranslation categoryTranslation;
+    @OneToMany(mappedBy = "language", orphanRemoval = true)
+    private List<CategoryTranslation> categoryTranslations;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "language")
-    private SubCategoryTranslation subCategoryTranslation;
+    @OneToMany(mappedBy = "language", orphanRemoval = true)
+    private List<SubCategoryTranslation> subCategoryTranslations;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "language")
-    private ItemTranslation itemTranslation;
+    @OneToMany(mappedBy = "language", orphanRemoval = true)
+    private List<ItemTranslation> itemTranslations;
 
     public Language() {
     }

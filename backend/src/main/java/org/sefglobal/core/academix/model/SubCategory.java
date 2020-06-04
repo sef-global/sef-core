@@ -1,14 +1,15 @@
 package org.sefglobal.core.academix.model;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -28,23 +29,29 @@ public class SubCategory extends AuditModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "subCategory")
-    private Set<SubCategoryTranslation> translations;
+    @OneToMany(mappedBy = "subCategory",
+               cascade = CascadeType.ALL,
+               orphanRemoval = true)
+    private List<SubCategoryTranslation> translations = new ArrayList<>();
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(
-            name = "category_id",
-            referencedColumnName = "id",
-            nullable = false
-    ) private Category category;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id",
+                referencedColumnName = "id",
+                nullable = false)
+    private Category category;
 
     @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-            name = "sub_category_item_map",
-            joinColumns = @JoinColumn(name = "sub_category_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id")
-    ) private Set<Item> items;
+    @ManyToMany(mappedBy = "subCategories")
+    private List<Item> items;
 
+    public void addTranslation(SubCategoryTranslation translation) {
+        translation.setSubCategory(this);
+        translations.add(translation);
+    }
+
+    public void removeTranslation(SubCategoryTranslation translation) {
+        translation.setSubCategory(null);
+        translations.remove(translation);
+    }
 }

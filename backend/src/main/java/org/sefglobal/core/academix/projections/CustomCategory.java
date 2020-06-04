@@ -1,8 +1,8 @@
 package org.sefglobal.core.academix.projections;
 
-import java.util.Set;
+import java.util.List;
 
 public interface CustomCategory {
     Long getId();
-    Set<CustomTranslation> getTranslations();
+    List<CustomTranslation> getTranslations();
 }

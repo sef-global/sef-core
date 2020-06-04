@@ -6,7 +6,8 @@ import lombok.Setter;
 import org.sefglobal.core.model.AuditModel;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "category")
@@ -17,11 +18,25 @@ public class Category extends AuditModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "category")
-    private Set<CategoryTranslation> translations;
+    @OneToMany(mappedBy = "category",
+               cascade = CascadeType.ALL,
+               orphanRemoval = true)
+    private List<CategoryTranslation> translations = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "category")
-    private Set<SubCategory> subCategories;
+    @OneToMany(mappedBy = "category",
+               cascade = CascadeType.ALL,
+               orphanRemoval = true)
+    private List<SubCategory> subCategories;
 
+    public void addTranslation(CategoryTranslation translation) {
+        translation.setCategory(this);
+        translations.add(translation);
+    }
+
+    // TODO check if breaks with category(nullable false) in CategoryTranslation
+    public void removeTranslation(CategoryTranslation translation) {
+        translation.setCategory(null);
+        translations.remove(translation);
+    }
 }
