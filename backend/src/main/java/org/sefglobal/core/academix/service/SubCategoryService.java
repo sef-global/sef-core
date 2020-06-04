@@ -51,7 +51,7 @@ public class SubCategoryService {
      * @throws ResourceNotFoundException if a subcategory with the requested id doesn't exist
      */
     public CustomSubCategory getSubCategoryById(Long subCategoryId) throws ResourceNotFoundException {
-        Optional<CustomSubCategory> subCategory = subCategoryRepository.findBy_Id(subCategoryId);
+        Optional<CustomSubCategory> subCategory = subCategoryRepository.findSubCategoryById(subCategoryId);
         if (!subCategory.isPresent()) {
             String msg = "Error, Sub Category by id:" + subCategoryId + " doesn't exist.";
             log.error(msg);

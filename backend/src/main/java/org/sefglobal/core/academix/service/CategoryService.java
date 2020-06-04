@@ -41,7 +41,7 @@ public class CategoryService {
      * @throws ResourceNotFoundException if a category with the requested id doesn't exist
      */
     public CustomCategory getCategoryById(Long categoryId) throws ResourceNotFoundException {
-        Optional<CustomCategory> category = categoryRepository.findBy_Id(categoryId);
+        Optional<CustomCategory> category = categoryRepository.findCategoryById(categoryId);
         if (!category.isPresent()) {
             String msg = "Error, Category by id:" + categoryId + " doesn't exist.";
             log.error(msg);
