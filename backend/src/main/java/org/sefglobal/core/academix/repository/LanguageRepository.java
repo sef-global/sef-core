@@ -1,6 +1,6 @@
-package org.sefglobal.core.repository;
+package org.sefglobal.core.academix.repository;
 
-import org.sefglobal.core.model.Language;
+import org.sefglobal.core.academix.model.Language;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**

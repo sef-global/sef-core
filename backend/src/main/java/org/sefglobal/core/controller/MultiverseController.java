@@ -1,13 +1,11 @@
 package org.sefglobal.core.controller;
 
 import org.hibernate.validator.constraints.Range;
-import org.sefglobal.core.exception.BadRequestException;
 import org.sefglobal.core.exception.ResourceNotFoundException;
 import org.sefglobal.core.model.*;
 import org.sefglobal.core.repository.AmbassadorRepository;
 import org.sefglobal.core.repository.EventRepository;
 import org.sefglobal.core.repository.UniversityRepository;
-import org.sefglobal.core.service.LanguageService;
 import org.sefglobal.core.util.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,8 +34,6 @@ public class MultiverseController {
     AmbassadorRepository ambassadorRepository;
     @Autowired
     EventRepository eventRepository;
-    @Autowired
-    LanguageService languageService;
 
     @GetMapping("/universities")
     @ResponseStatus(HttpStatus.OK)
@@ -205,21 +201,4 @@ public class MultiverseController {
             throw new ResourceNotFoundException(message);
         }
     }
-
-    @GetMapping("/languages")
-    @ResponseStatus(HttpStatus.OK)
-    public Page<Language> getAllLanguages(@RequestParam
-                                              @Range int pageNumber,
-                                          @RequestParam
-                                              @Range(min = 1, max = 20) int size) {
-        return languageService.getAllLanguages(pageNumber, size);
-    }
-
-    @PostMapping("/languages")
-    @ResponseStatus(HttpStatus.CREATED)
-    public boolean addLanguage(@RequestParam String localeIdentifier) throws BadRequestException {
-        languageService.addLanguage(localeIdentifier);
-        return true;
-    }
-
 }

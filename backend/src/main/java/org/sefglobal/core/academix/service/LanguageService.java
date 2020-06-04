@@ -1,8 +1,8 @@
-package org.sefglobal.core.service;
+package org.sefglobal.core.academix.service;
 
 import org.sefglobal.core.exception.BadRequestException;
-import org.sefglobal.core.model.Language;
-import org.sefglobal.core.repository.LanguageRepository;
+import org.sefglobal.core.academix.model.Language;
+import org.sefglobal.core.academix.repository.LanguageRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -31,8 +31,8 @@ public class LanguageService {
      * @return {@link Page} of {@link Language}
      */
     public Page<Language> getAllLanguages(int pageNumber, int size) {
-        Pageable pagable = PageRequest.of(pageNumber, size);
-        return languageRepository.findAll(pagable);
+        Pageable pageable = PageRequest.of(pageNumber, size);
+        return languageRepository.findAll(pageable);
     }
 
     /**
@@ -55,5 +55,4 @@ public class LanguageService {
 
         languageRepository.save(new Language(localeIdentifier));
     }
-
 }

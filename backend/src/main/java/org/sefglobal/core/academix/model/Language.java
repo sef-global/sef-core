@@ -1,17 +1,16 @@
-package org.sefglobal.core.model;
+package org.sefglobal.core.academix.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import org.sefglobal.core.academix.model.CategoryTranslation;
-import org.sefglobal.core.academix.model.ItemTranslation;
-import org.sefglobal.core.academix.model.SubCategoryTranslation;
+import org.sefglobal.core.model.AuditModel;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "language")
-@Getter @Setter
+@Getter
+@Setter
 public class Language extends AuditModel {
 
     @Id

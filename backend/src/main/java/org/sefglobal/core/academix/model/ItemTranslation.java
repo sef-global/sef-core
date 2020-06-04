@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.sefglobal.core.model.AuditModel;
-import org.sefglobal.core.model.Language;
 
 import javax.persistence.*;
 
