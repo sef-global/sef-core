@@ -3,6 +3,9 @@ package org.sefglobal.core.service;
 import org.sefglobal.core.exception.ResourceNotFoundException;
 import org.sefglobal.core.model.Certificate;
 import org.sefglobal.core.repository.CertificateRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,10 +22,13 @@ public class CertificateService {
     /**
      * Retrieves all the certificates in the repository
      *
-     * @return List of certificate objects
+     * @param pageNumber which is the starting index of the page
+     * @param pageSize   which is the size of the page
+     * @return {@link Page} of {@link Certificate}
      */
-    public List<Certificate> getCertificates(){
-        return certificateRepository.findAll();
+    public Page<Certificate> getCertificates(int pageNumber, int pageSize){
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return certificateRepository.findAll(pageable);
     }
 
     /**

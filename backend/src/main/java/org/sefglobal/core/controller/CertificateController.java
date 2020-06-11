@@ -3,6 +3,7 @@ package org.sefglobal.core.controller;
 import org.sefglobal.core.exception.ResourceNotFoundException;
 import org.sefglobal.core.model.Certificate;
 import org.sefglobal.core.service.CertificateService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +21,8 @@ public class CertificateController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Certificate> getCertificates(){
-        return certificateService.getCertificates();
+    public Page<Certificate> getCertificates(@RequestParam int pageNumber, int pageSize){
+        return certificateService.getCertificates(pageNumber, pageSize);
     }
 
     @GetMapping("/{id}")
