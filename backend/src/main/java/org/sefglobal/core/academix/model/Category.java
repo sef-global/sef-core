@@ -1,8 +1,6 @@
 package org.sefglobal.core.academix.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
 import org.sefglobal.core.model.AuditModel;
 
 import javax.persistence.*;
@@ -11,7 +9,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "category")
-@Getter @Setter
 public class Category extends AuditModel {
 
     @Id
@@ -29,14 +26,33 @@ public class Category extends AuditModel {
                orphanRemoval = true)
     private List<SubCategory> subCategories;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<CategoryTranslation> getTranslations() {
+        return translations;
+    }
+
     public void addTranslation(CategoryTranslation translation) {
         translation.setCategory(this);
         translations.add(translation);
     }
 
-    // TODO check if breaks with category(nullable false) in CategoryTranslation
-    public void removeTranslation(CategoryTranslation translation) {
-        translation.setCategory(null);
-        translations.remove(translation);
+    public void setTranslations(
+            List<CategoryTranslation> translations) {
+        this.translations = translations;
+    }
+
+    public List<SubCategory> getSubCategories() {
+        return subCategories;
+    }
+
+    public void setSubCategories(List<SubCategory> subCategories) {
+        this.subCategories = subCategories;
     }
 }

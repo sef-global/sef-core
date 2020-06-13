@@ -1,8 +1,6 @@
 package org.sefglobal.core.academix.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
 import org.sefglobal.core.model.AuditModel;
 
 import javax.persistence.*;
@@ -10,7 +8,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "language")
-@Getter @Setter
 public class Language extends AuditModel {
 
     @Id
@@ -37,5 +34,48 @@ public class Language extends AuditModel {
 
     public Language(String locale) {
         this.locale = locale;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getLocale() {
+        return locale;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
+    }
+
+    public List<CategoryTranslation> getCategoryTranslations() {
+        return categoryTranslations;
+    }
+
+    public void setCategoryTranslations(
+            List<CategoryTranslation> categoryTranslations) {
+        this.categoryTranslations = categoryTranslations;
+    }
+
+    public List<SubCategoryTranslation> getSubCategoryTranslations() {
+        return subCategoryTranslations;
+    }
+
+    public void setSubCategoryTranslations(
+            List<SubCategoryTranslation> subCategoryTranslations) {
+        this.subCategoryTranslations = subCategoryTranslations;
+    }
+
+    public List<ItemTranslation> getItemTranslations() {
+        return itemTranslations;
+    }
+
+    public void setItemTranslations(
+            List<ItemTranslation> itemTranslations) {
+        this.itemTranslations = itemTranslations;
     }
 }

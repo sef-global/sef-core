@@ -16,13 +16,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
 import org.sefglobal.core.model.AuditModel;
 
 @Entity
 @Table(name = "sub_category")
-@Getter @Setter
 public class SubCategory extends AuditModel {
 
     @Id
@@ -43,15 +40,43 @@ public class SubCategory extends AuditModel {
 
     @JsonIgnore
     @ManyToMany(mappedBy = "subCategories")
-    private List<Item> items;
+    private List<Item> items = new ArrayList<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<SubCategoryTranslation> getTranslations() {
+        return translations;
+    }
 
     public void addTranslation(SubCategoryTranslation translation) {
         translation.setSubCategory(this);
         translations.add(translation);
     }
 
-    public void removeTranslation(SubCategoryTranslation translation) {
-        translation.setSubCategory(null);
-        translations.remove(translation);
+    public void setTranslations(
+            List<SubCategoryTranslation> translations) {
+        this.translations = translations;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
     }
 }

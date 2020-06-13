@@ -3,12 +3,12 @@ package org.sefglobal.core.academix.service;
 import org.sefglobal.core.exception.BadRequestException;
 import org.sefglobal.core.academix.model.Language;
 import org.sefglobal.core.academix.repository.LanguageRepository;
+import org.sefglobal.core.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Service to manage {@link Language} locales
@@ -26,22 +26,21 @@ public class LanguageService {
     /**
      * Get all supported language locales
      *
-     * @param pageNumber which is the starting index of the page
-     * @param size       which is the size of the page
-     * @return {@link Page} of {@link Language}
+     * @return {@link List} of {@link Language}
      */
-    public Page<Language> getAllLanguages(int pageNumber, int size) {
-        Pageable pageable = PageRequest.of(pageNumber, size);
-        return languageRepository.findAll(pageable);
+    public List<Language> getAllLanguages() {
+        return languageRepository.findAll();
     }
 
     /**
      * Add a new {@link Language} support
      *
      * @param localeIdentifier which is the LCID
+     * @return the created {@link Language}
+     *
      * @throws BadRequestException if validating the {@code localeIdentifier} fails
      */
-    public void addLanguage(String localeIdentifier) throws BadRequestException {
+    public Language addLanguage(String localeIdentifier) throws BadRequestException {
         if (localeIdentifier == null || localeIdentifier.isEmpty()) {
             String msg = "Error, LCID: " + localeIdentifier + " is invalid.";
             log.error(msg);
@@ -53,6 +52,27 @@ public class LanguageService {
             throw new BadRequestException(msg);
         }
 
-        languageRepository.save(new Language(localeIdentifier));
+        Language language = new Language(localeIdentifier);
+        languageRepository.save(language);
+        return language;
+    }
+
+    /**
+     * Delete a existing {@link Language}
+     *
+     * @param id which is the identifier of the {@link Language}
+     * @return {@code true} if language gets deleted
+     *
+     * @throws ResourceNotFoundException if {@link Language} for {@code id} doesn't exist
+     */
+    public boolean deleteLanguage(long id) throws ResourceNotFoundException {
+        if (!languageRepository.existsById(id)) {
+            String msg = "Error, Language with id: " + id + " cannot be deleted. " +
+                         "Language doesn't exist.";
+            log.error(msg);
+            throw new ResourceNotFoundException(msg);
+        }
+        languageRepository.deleteById(id);
+        return true;
     }
 }

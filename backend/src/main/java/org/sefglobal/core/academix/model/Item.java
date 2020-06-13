@@ -11,7 +11,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "Item")
-@Getter @Setter
 public class Item extends AuditModel {
 
     @Id
@@ -33,15 +32,48 @@ public class Item extends AuditModel {
                joinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"),
                inverseJoinColumns = @JoinColumn(name = "sub_category_id",
                                                 referencedColumnName = "id"))
-    private List<SubCategory> subCategories;
+    private List<SubCategory> subCategories = new ArrayList<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public List<ItemTranslation> getTranslations() {
+        return translations;
+    }
 
     public void addTranslation(ItemTranslation translation) {
         translation.setItem(this);
         translations.add(translation);
     }
 
-    public void removeTranslation(ItemTranslation translation) {
-        translation.setItem(null);
-        translations.remove(translation);
+    public void setTranslations(
+            List<ItemTranslation> translations) {
+        this.translations = translations;
+    }
+
+    public List<SubCategory> getSubCategories() {
+        return subCategories;
+    }
+
+    public void addSubCategory(SubCategory subCategory){
+        subCategory.getItems().add(this);
+        subCategories.add(subCategory);
+    }
+
+    public void setSubCategories(List<SubCategory> subCategories) {
+        this.subCategories = subCategories;
     }
 }

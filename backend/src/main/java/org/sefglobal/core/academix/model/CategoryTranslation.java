@@ -29,7 +29,6 @@ public class CategoryTranslation extends AuditModel {
     @Column(columnDefinition = "TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci")
     private String name;
 
-
     public Category getCategory() {
         return category;
     }
