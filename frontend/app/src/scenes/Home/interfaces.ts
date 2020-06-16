@@ -9,3 +9,18 @@ export interface University {
   name: string;
   imageUrl: string;
 }
+
+export interface Translation {
+  name: string;
+  language: string;
+}
+
+export interface Category {
+  id: number;
+  translations: Translation[];
+}
+
+export interface SubCategory {
+  id: number;
+  translations: Translation[];
+}
