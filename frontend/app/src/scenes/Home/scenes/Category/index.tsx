@@ -20,15 +20,13 @@ const columns = [
     // eslint-disable-next-line react/display-name
     render: (translations: Translation[]) => (
       <Row>
-        {translations.map((translation) => {
-          return (
-            <Col key={translation.language}>
-              <p>
-                {translation.name} : {translation.language}
-              </p>
-            </Col>
-          );
-        })}
+        return (
+        <Col key={translations[0].name}>
+          <p>
+            {translations[0].name} : {translations[0].language}
+          </p>
+        </Col>
+        );
       </Row>
     ),
   },

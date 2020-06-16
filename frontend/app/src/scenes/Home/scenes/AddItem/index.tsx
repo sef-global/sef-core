@@ -20,11 +20,8 @@ import { handleApiError } from '../../../../services/util/errorHandler';
 const { Title, Text } = Typography;
 const { Option } = Select;
 
-class AddItem extends React.Component<
-  RouteComponentProps<any>,
-  AddItemStateProps
-> {
-  constructor(props: RouteComponentProps<any>) {
+class AddItem extends React.Component<RouteComponentProps, AddItemStateProps> {
+  constructor(props: RouteComponentProps) {
     super(props);
     this.state = {
       isLoading: false,
@@ -64,8 +61,6 @@ class AddItem extends React.Component<
         },
       ],
     };
-    console.log(item);
-    console.log(values.subCategories);
     axios
       .post(
         `${window.location.origin}/core/academix/admin/items?subCategoryIds=${values.subCategories}`,
@@ -78,7 +73,6 @@ class AddItem extends React.Component<
             message: 'Success!',
             description: 'Successfully Created an Item',
           });
-          console.log(res);
           this.props.history.push(`${res.data.id}/edit`);
         }
       })

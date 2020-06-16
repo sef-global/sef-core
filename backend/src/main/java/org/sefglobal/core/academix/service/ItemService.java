@@ -51,7 +51,7 @@ public class ItemService {
      */
     public CustomItem getItemByID(Long id) throws ResourceNotFoundException{
         if (!itemRepository.existsById(id)){
-            String msg = "Error, Item by id:"+id+" doesn't exist.";
+            String msg = "Error, Item by id:" + id + " doesn't exist.";
             log.error(msg);
             throw new ResourceNotFoundException(msg);
         }
@@ -69,7 +69,7 @@ public class ItemService {
      */
     public Page<CustomItem> getAllItemsBySubCategory(Long subCategoryId, int pageNumber, int pageSize) throws ResourceNotFoundException {
         if(!subCategoryRepository.existsById(subCategoryId)){
-            String msg = "Error, Sub Category by id:"+subCategoryId+" doesn't exist.";
+            String msg = "Error, Sub Category by id:" + subCategoryId + " doesn't exist.";
             log.error(msg);
             throw new ResourceNotFoundException(msg);
         }

@@ -1,7 +1,10 @@
-import { Item, SubCategory } from '../../interfaces';
+import { Item } from '../../interfaces';
 
 export interface EditItemStateProps {
   isLoading: boolean;
-  subCategories: SubCategory[];
   item: Item | null;
+}
+
+export interface ItemUrlParams {
+  id: string;
 }
