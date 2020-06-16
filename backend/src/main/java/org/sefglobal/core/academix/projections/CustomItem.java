@@ -1,9 +1,9 @@
 package org.sefglobal.core.academix.projections;
 
-import java.util.Set;
+import java.util.List;
 
 public interface CustomItem {
     Long getId();
     String getLink();
-    Set<CustomItemTranslation> getTranslations();
+    List<CustomItemTranslation> getTranslations();
 }
