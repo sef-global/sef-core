@@ -39,7 +39,7 @@ class AddItem extends React.Component<
   fetchSubCategories = () => {
     axios
       .get(
-        window.location.origin + '/core/academix/categories/1/sub-categories'
+        window.location.origin + '/core/academix/sub-categories'
       )
       .then((result: AxiosResponse<SubCategory[]>) => {
         if (result.status == 200) {

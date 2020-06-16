@@ -22,4 +22,10 @@ public class ItemController {
                                                        @RequestParam int pageSize) throws ResourceNotFoundException {
         return itemService.getAllItemsBySubCategory(id, pageNumber, pageSize);
     }
+
+    @GetMapping("/academix/items/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public CustomItem getItemsById(@PathVariable Long id) throws ResourceNotFoundException {
+        return itemService.getItemByID(id);
+    }
 }

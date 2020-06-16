@@ -43,6 +43,22 @@ public class ItemService {
     }
 
     /**
+     * Retrieves an item by the requested id
+     *
+     * @param id which is the id of the requested item
+     * @return {@link Item}
+     * @throws ResourceNotFoundException if an item with the requested id doesn't exist
+     */
+    public CustomItem getItemByID(Long id) throws ResourceNotFoundException{
+        if (!itemRepository.existsById(id)){
+            String msg = "Error, Item by id:"+id+" doesn't exist.";
+            log.error(msg);
+            throw new ResourceNotFoundException(msg);
+        }
+        return itemRepository.getOneById(id);
+    }
+
+    /**
      * Retrieves all the items by the requested subcategory
      *
      * @param subCategoryId which is the id of the requested subcategory

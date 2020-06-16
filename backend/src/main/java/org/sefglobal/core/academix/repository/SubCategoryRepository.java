@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface SubCategoryRepository extends JpaRepository<SubCategory, Long> {
+    List<CustomSubCategory> getAllBy();
     List<CustomSubCategory> getAllByCategory_Id(Long categoryId);
     Optional<CustomSubCategory> findSubCategoryById(Long subCategoryId);
 }

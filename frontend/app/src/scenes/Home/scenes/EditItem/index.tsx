@@ -42,9 +42,7 @@ class EditItem extends React.Component<
   fetchSubCategories = () => {
     this.setState({ isLoading: true });
     axios
-      .get(
-        window.location.origin + '/core/academix/categories/1/sub-categories'
-      )
+      .get(window.location.origin + '/core/academix/sub-categories')
       .then((result: AxiosResponse<SubCategory[]>) => {
         if (result.status == 200) {
           this.setState({ subCategories: result.data, isLoading: false });
@@ -63,7 +61,7 @@ class EditItem extends React.Component<
     axios
       .get(
         window.location.origin +
-          '/core/academix/item/' +
+          '/core/academix/items/' +
           this.props.match.params.id
       )
       .then((result: AxiosResponse<Item>) => {
