@@ -1,7 +1,5 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { AddItemStateProps, AddItemPayload } from './interfaces';
-import { SubCategory } from '../../interfaces';
 import {
   Button,
   Col,
@@ -14,29 +12,35 @@ import {
   Typography,
 } from 'antd';
 import mainStyles from '../../styles.css';
+import { Item, SubCategory } from '../../interfaces';
 import axios, { AxiosResponse } from 'axios';
 import { handleApiError } from '../../../../services/util/errorHandler';
+import { AddItemPayload } from '../AddItem/interfaces';
+import { EditItemStateProps } from './interfaces';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
 
-class AddItem extends React.Component<
+class EditItem extends React.Component<
   RouteComponentProps<any>,
-  AddItemStateProps
+  EditItemStateProps
 > {
-  constructor(props: RouteComponentProps<any>) {
+  constructor(props: RouteComponentProps) {
     super(props);
     this.state = {
       isLoading: false,
       subCategories: [],
+      item: null,
     };
   }
 
   componentDidMount() {
+    this.fetchItem();
     this.fetchSubCategories();
   }
 
   fetchSubCategories = () => {
+    this.setState({ isLoading: true });
     axios
       .get(
         window.location.origin + '/core/academix/categories/1/sub-categories'
@@ -54,6 +58,28 @@ class AddItem extends React.Component<
       );
   };
 
+  fetchItem = () => {
+    this.setState({ isLoading: true });
+    axios
+      .get(
+        window.location.origin +
+          '/core/academix/item/' +
+          this.props.match.params.id
+      )
+      .then((result: AxiosResponse<Item>) => {
+        if (result.status == 200) {
+          this.setState({ item: result.data, isLoading: false });
+        }
+      })
+      .catch((error) => {
+        handleApiError(
+          error,
+          'Something went wrong when trying to load the Item'
+        );
+        this.props.history.goBack();
+      });
+  };
+
   onFinish = (values: any) => {
     this.setState({ isLoading: true });
     const item = {
@@ -66,11 +92,9 @@ class AddItem extends React.Component<
         },
       ],
     };
-    console.log(item);
-    console.log(values.subCategories);
     axios
-      .post(
-        `${window.location.origin}/core/academix/admin/items?subCategoryIds=${values.subCategories}`,
+      .put(
+        `${window.location.origin}/core/academix/admin/items/${this.state.item?.id}`,
         item
       )
       .then((res: AxiosResponse<AddItemPayload>) => {
@@ -78,14 +102,13 @@ class AddItem extends React.Component<
           this.setState({ isLoading: false });
           notification.success({
             message: 'Success!',
-            description: 'Successfully Created an Item',
+            description: 'Successfully Updated the Item',
           });
-          this.props.history.push(`${res.data.id}/edit`);
         }
       })
       .catch((error) => {
         this.setState({ isLoading: false });
-        handleApiError(error, 'Something went wrong when creating the item');
+        handleApiError(error, 'Something went wrong when updating the item');
       });
   };
 
@@ -94,10 +117,10 @@ class AddItem extends React.Component<
       <div>
         <Row className={mainStyles.innerContent}>
           <Col lg={24} xl={{ span: 20, offset: 2 }}>
-            <Title>Add a new Item</Title>
-            <Row>
-              <Col md={12}>
-                <Spin tip="Loading..." spinning={this.state.isLoading}>
+            <Spin tip="Loading..." spinning={this.state.isLoading}>
+              <Title>Update item: {this.state.item?.id}</Title>
+              <Row>
+                <Col md={12}>
                   <Form size="large" onFinish={this.onFinish}>
                     <Title level={3}>Sub-Categories</Title>
                     <Text>Select Sub Categories for the item</Text>
@@ -127,12 +150,18 @@ class AddItem extends React.Component<
                     <Title level={3}>Link</Title>
                     <Text>Link of the source of the Item</Text>
                     <Form.Item name="link" className={mainStyles.formItem}>
-                      <Input placeholder="ex: https://www.abc.com" />
+                      <Input
+                        value={this.state.item?.link}
+                        placeholder="ex: https://www.abc.com"
+                      />
                     </Form.Item>
                     <Title level={3}>Name</Title>
                     <Text>Name of the Item</Text>
                     <Form.Item name="name" className={mainStyles.formItem}>
-                      <Input placeholder="ex: Reasons to do a PhD" />
+                      <Input
+                        value={this.state.item?.translations[0].name}
+                        placeholder="ex: Reasons to do a PhD"
+                      />
                     </Form.Item>
                     <Title level={3}>Description</Title>
                     <Text>Description of the item</Text>
@@ -140,7 +169,9 @@ class AddItem extends React.Component<
                       name="description"
                       className={mainStyles.formItem}
                     >
-                      <Input.TextArea />
+                      <Input.TextArea
+                        value={this.state.item?.translations[0].description}
+                      />
                     </Form.Item>
                     <Form.Item>
                       <Button type="primary" htmlType="submit">
@@ -148,9 +179,9 @@ class AddItem extends React.Component<
                       </Button>
                     </Form.Item>
                   </Form>
-                </Spin>
-              </Col>
-            </Row>
+                </Col>
+              </Row>
+            </Spin>
           </Col>
         </Row>
       </div>
@@ -158,4 +189,4 @@ class AddItem extends React.Component<
   }
 }
 
-export default withRouter(AddItem);
+export default withRouter(EditItem);

@@ -15,6 +15,10 @@ export interface Translation {
   language: string;
 }
 
+export interface ItemTranslation extends Translation {
+  description: string;
+}
+
 export interface Category {
   id: number;
   translations: Translation[];
@@ -23,4 +27,10 @@ export interface Category {
 export interface SubCategory {
   id: number;
   translations: Translation[];
+}
+
+export interface Item {
+  id: number;
+  link: string;
+  translations: ItemTranslation[];
 }
