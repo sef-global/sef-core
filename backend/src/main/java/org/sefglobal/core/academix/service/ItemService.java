@@ -100,7 +100,8 @@ public class ItemService {
 
         Item item = convertToEntity(itemDto);
         existingSubCategories.forEach(item::addSubCategory);
-        itemRepository.save(item);
+        Item itemSaved = itemRepository.save(item);
+        itemDto.setId(itemSaved.getId());
         return itemDto;
     }
 

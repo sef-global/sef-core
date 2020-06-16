@@ -1,7 +1,7 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { AddItemStateProps, AddItemPayload } from './interfaces';
-import { SubCategory } from '../../interfaces';
+import { AddItemStateProps } from './interfaces';
+import { Item, SubCategory } from '../../interfaces';
 import {
   Button,
   Col,
@@ -38,9 +38,7 @@ class AddItem extends React.Component<
 
   fetchSubCategories = () => {
     axios
-      .get(
-        window.location.origin + '/core/academix/sub-categories'
-      )
+      .get(window.location.origin + '/core/academix/sub-categories')
       .then((result: AxiosResponse<SubCategory[]>) => {
         if (result.status == 200) {
           this.setState({ subCategories: result.data, isLoading: false });
@@ -73,13 +71,14 @@ class AddItem extends React.Component<
         `${window.location.origin}/core/academix/admin/items?subCategoryIds=${values.subCategories}`,
         item
       )
-      .then((res: AxiosResponse<AddItemPayload>) => {
+      .then((res: AxiosResponse<Item>) => {
         if (res.status == 201) {
           this.setState({ isLoading: false });
           notification.success({
             message: 'Success!',
             description: 'Successfully Created an Item',
           });
+          console.log(res);
           this.props.history.push(`${res.data.id}/edit`);
         }
       })
