@@ -1,5 +1,6 @@
 package org.sefglobal.core.academix.controller;
 
+import org.sefglobal.core.academix.model.SubCategory;
 import org.sefglobal.core.academix.projections.CustomSubCategory;
 import org.sefglobal.core.academix.service.SubCategoryService;
 import org.sefglobal.core.exception.ResourceNotFoundException;
@@ -18,6 +19,12 @@ public class SubCategoryController {
 
     public SubCategoryController(SubCategoryService subCategoryService) {
         this.subCategoryService = subCategoryService;
+    }
+
+    @GetMapping("/academix/sub-categories")
+    @ResponseStatus(HttpStatus.OK)
+    public List<CustomSubCategory> getSubCategories() {
+        return subCategoryService.getSubcategories();
     }
 
     @GetMapping("/academix/categories/{id}/sub-categories")

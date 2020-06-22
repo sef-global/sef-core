@@ -43,6 +43,22 @@ public class ItemService {
     }
 
     /**
+     * Retrieves an item by the requested id
+     *
+     * @param id which is the id of the requested item
+     * @return {@link Item}
+     * @throws ResourceNotFoundException if an item with the requested id doesn't exist
+     */
+    public CustomItem getItemByID(Long id) throws ResourceNotFoundException{
+        if (!itemRepository.existsById(id)){
+            String msg = "Error, Item by id:" + id + " doesn't exist.";
+            log.error(msg);
+            throw new ResourceNotFoundException(msg);
+        }
+        return itemRepository.getOneById(id);
+    }
+
+    /**
      * Retrieves all the items by the requested subcategory
      *
      * @param subCategoryId which is the id of the requested subcategory
@@ -53,7 +69,7 @@ public class ItemService {
      */
     public Page<CustomItem> getAllItemsBySubCategory(Long subCategoryId, int pageNumber, int pageSize) throws ResourceNotFoundException {
         if(!subCategoryRepository.existsById(subCategoryId)){
-            String msg = "Error, Sub Category by id:"+subCategoryId+" doesn't exist.";
+            String msg = "Error, Sub Category by id:" + subCategoryId + " doesn't exist.";
             log.error(msg);
             throw new ResourceNotFoundException(msg);
         }
@@ -84,7 +100,8 @@ public class ItemService {
 
         Item item = convertToEntity(itemDto);
         existingSubCategories.forEach(item::addSubCategory);
-        itemRepository.save(item);
+        Item itemSaved = itemRepository.save(item);
+        itemDto.setId(itemSaved.getId());
         return itemDto;
     }
 

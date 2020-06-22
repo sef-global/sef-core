@@ -11,6 +11,9 @@ import Ambassadors from './scenes/Home/scenes/Ambassadors';
 import AddUniversity from './scenes/Home/scenes/Universities/scenes/AddUniversity';
 import AddAmbassador from './scenes/Home/scenes/Ambassadors/scenes/AddAmbassador';
 import { SingleRoute } from './interfaces';
+import Categories from './scenes/Home/scenes/Category';
+import AddItem from './scenes/Home/scenes/AddItem';
+import EditItem from './scenes/Home/scenes/EditItem';
 
 const routes: SingleRoute[] = [
   {
@@ -47,6 +50,21 @@ const routes: SingleRoute[] = [
         path: '/dashboard/ambassadors/add',
         exact: true,
         component: AddAmbassador,
+      },
+      {
+        path: '/dashboard/academix/categories',
+        exact: true,
+        component: Categories,
+      },
+      {
+        path: '/dashboard/academix/item/add',
+        exact: true,
+        component: AddItem,
+      },
+      {
+        path: '/dashboard/academix/item/:id/edit',
+        exact: true,
+        component: EditItem,
       },
     ],
   },

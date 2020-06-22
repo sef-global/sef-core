@@ -8,6 +8,8 @@ import {
   BankOutlined,
   GlobalOutlined,
   TeamOutlined,
+  BookOutlined,
+  FileAddOutlined,
 } from '@ant-design/icons';
 import { Switch, Link } from 'react-router-dom';
 import RouteWithSubRoutes from '../../components/RouteWithSubRoutes';
@@ -65,6 +67,39 @@ class Home extends React.Component<HomeProps> {
                 </Link>
               </Menu.Item>
             </Menu.SubMenu>
+            <Menu.SubMenu
+              key="academix"
+              icon={<BookOutlined />}
+              title="AcadeMix"
+            >
+              <Menu.Item icon={<FileAddOutlined />}>
+                <Link
+                  key="academix_items"
+                  to="/dashboard/academix/items"
+                  className={styles.txtWhite}
+                >
+                  Items
+                </Link>
+              </Menu.Item>
+              <Menu.Item icon={<FileAddOutlined />}>
+                <Link
+                  key="academix_items"
+                  to="/dashboard/academix/sub_categories"
+                  className={styles.txtWhite}
+                >
+                  Sub Categories
+                </Link>
+              </Menu.Item>
+              <Menu.Item icon={<FileAddOutlined />}>
+                <Link
+                  key="academix_items"
+                  to="/dashboard/academix/categories"
+                  className={styles.txtWhite}
+                >
+                  Categories
+                </Link>
+              </Menu.Item>
+            </Menu.SubMenu>
           </Menu>
         </Sider>
         <Layout>
@@ -82,6 +117,9 @@ class Home extends React.Component<HomeProps> {
                 </Menu.Item>
                 <Menu.Item>
                   <Link to="/dashboard/ambassadors/add">Ambassador</Link>
+                </Menu.Item>
+                <Menu.Item>
+                  <Link to="/dashboard/academix/item/add">Item</Link>
                 </Menu.Item>
               </Menu.SubMenu>
               <Menu.SubMenu

@@ -40,6 +40,15 @@ public class SubCategoryService {
     }
 
     /**
+     * Retrieves all the subcategories
+     *
+     * @return {@link List} of {@link SubCategory}
+     */
+    public List<CustomSubCategory> getSubcategories() {
+        return subCategoryRepository.getAllBy();
+    }
+
+    /**
      * Retrieves all the subcategories by the requested category
      *
      * @param categoryId which is the id of the requested category
