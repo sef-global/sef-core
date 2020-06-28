@@ -1,6 +1,5 @@
 package org.sefglobal.core.academix.controller.admin;
 
-import org.sefglobal.core.academix.dto.CategoryDto;
 import org.sefglobal.core.academix.model.Category;
 import org.sefglobal.core.academix.service.CategoryService;
 import org.sefglobal.core.exception.ResourceNotFoundException;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,25 +24,7 @@ public class CategoryAdminController {
         this.categoryService = categoryService;
     }
 
-    // TODO remove
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public CategoryDto addCategory(@Valid @RequestBody CategoryDto category)
-            throws ResourceNotFoundException {
-        return categoryService.addCategory(category);
-    }
-
-    // TODO: 6/27/20 Remove method
-    @PutMapping("/{id}/translations")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public boolean updateTranslations(@PathVariable long id,
-                                      @RequestParam boolean isAllReset,
-                                      @Valid @RequestBody CategoryDto category)
-            throws ResourceNotFoundException {
-        return categoryService.updateTranslations(id, isAllReset, category);
-    }
-
-    @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
     public Category addCategory(@Valid @RequestBody Category category) {
         return categoryService.addCategory(category);

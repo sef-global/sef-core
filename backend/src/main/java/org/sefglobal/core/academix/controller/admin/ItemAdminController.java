@@ -1,6 +1,5 @@
 package org.sefglobal.core.academix.controller.admin;
 
-import org.sefglobal.core.academix.dto.ItemDto;
 import org.sefglobal.core.academix.model.Item;
 import org.sefglobal.core.academix.service.ItemService;
 import org.sefglobal.core.exception.ResourceNotFoundException;
@@ -28,25 +27,6 @@ public class ItemAdminController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    // TODO: 6/27/20 Remove method
-    public ItemDto addItem(@RequestParam List<Long> subCategoryIds,
-                           @Valid @RequestBody ItemDto itemDto)
-            throws ResourceNotFoundException {
-        return itemService.addItem(subCategoryIds, itemDto);
-    }
-
-    @PutMapping("/{id}/translations")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    // TODO: 6/27/20 Remove method
-    public boolean updateTranslation(@PathVariable long id,
-                                     @RequestParam boolean isAllReset,
-                                     @Valid @RequestBody ItemDto itemDto)
-            throws ResourceNotFoundException {
-        return itemService.updateTranslation(id, isAllReset, itemDto);
-    }
-
-    @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
     public Item addItem(@RequestParam List<Long> subCategoryIds,
                         @Valid @RequestBody Item item) throws ResourceNotFoundException {
