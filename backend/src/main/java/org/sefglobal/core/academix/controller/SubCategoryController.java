@@ -1,18 +1,20 @@
 package org.sefglobal.core.academix.controller;
 
+import org.hibernate.validator.constraints.Range;
+import org.sefglobal.core.academix.model.Item;
 import org.sefglobal.core.academix.model.SubCategory;
-import org.sefglobal.core.academix.projections.CustomSubCategory;
 import org.sefglobal.core.academix.service.SubCategoryService;
 import org.sefglobal.core.exception.ResourceNotFoundException;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/academix/sub-categories")
+@Validated
 public class SubCategoryController {
 
     private final SubCategoryService subCategoryService;
@@ -21,21 +23,27 @@ public class SubCategoryController {
         this.subCategoryService = subCategoryService;
     }
 
-    @GetMapping("/academix/sub-categories")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<CustomSubCategory> getSubCategories() {
-        return subCategoryService.getSubcategories();
+    public List<SubCategory> getAllSubCategories() {
+        return subCategoryService.getAllSubcategories();
     }
 
-    @GetMapping("/academix/categories/{id}/sub-categories")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public List<CustomSubCategory> getAllSubCategoriesByCategoryId(@PathVariable Long id) throws ResourceNotFoundException {
-        return subCategoryService.getAllSubCategoryByCategory(id);
-    }
-
-    @GetMapping("/academix/sub-categories/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public CustomSubCategory getSubCategoryById(@PathVariable Long id) throws ResourceNotFoundException {
+    public SubCategory getSubCategoryById(@PathVariable long id)
+            throws ResourceNotFoundException {
         return subCategoryService.getSubCategoryById(id);
+    }
+
+    @GetMapping("/{id}/items")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<Item> getItemsBySubCategoryId(@PathVariable long id,
+                                              @RequestParam
+                                                @Range int pageNumber,
+                                              @RequestParam
+                                                @Range(min = 1, max = 20) int pageSize)
+            throws ResourceNotFoundException {
+        return subCategoryService.getItemsBySubCategoryId(id, pageNumber, pageSize);
     }
 }

@@ -1,6 +1,6 @@
 package org.sefglobal.core.academix.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.sefglobal.core.academix.model.identifiers.ItemTranslationId;
 import org.sefglobal.core.model.AuditModel;
 
@@ -9,9 +9,9 @@ import javax.persistence.*;
 @Entity
 @Table(name = "item_translation")
 @IdClass(ItemTranslationId.class)
+@JsonIgnoreProperties({"createdAt", "updatedAt", "item"})
 public class ItemTranslation extends AuditModel {
 
-    @JsonIgnore
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id",

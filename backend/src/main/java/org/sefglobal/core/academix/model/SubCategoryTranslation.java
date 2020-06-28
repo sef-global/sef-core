@@ -1,17 +1,24 @@
 package org.sefglobal.core.academix.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.sefglobal.core.academix.model.identifiers.SubCategoryTranslationId;
 import org.sefglobal.core.model.AuditModel;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "sub_category_translation")
 @IdClass(SubCategoryTranslationId.class)
+@JsonIgnoreProperties({"createdAt", "updatedAt", "subCategory"})
 public class SubCategoryTranslation extends AuditModel {
 
-    @JsonIgnore
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sub_category_id",

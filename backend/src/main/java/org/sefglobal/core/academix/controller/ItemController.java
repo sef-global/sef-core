@@ -1,13 +1,13 @@
 package org.sefglobal.core.academix.controller;
 
-import org.sefglobal.core.academix.projections.CustomItem;
+import org.sefglobal.core.academix.model.Item;
 import org.sefglobal.core.academix.service.ItemService;
 import org.sefglobal.core.exception.ResourceNotFoundException;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/academix/items")
 public class ItemController {
     private final ItemService itemService;
 
@@ -15,17 +15,9 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-    @GetMapping("/academix/sub-categories/{id}/items")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Page<CustomItem> getAllItemsBySubCategoryId(@PathVariable Long id,
-                                                       @RequestParam int pageNumber,
-                                                       @RequestParam int pageSize) throws ResourceNotFoundException {
-        return itemService.getAllItemsBySubCategory(id, pageNumber, pageSize);
-    }
-
-    @GetMapping("/academix/items/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public CustomItem getItemsById(@PathVariable Long id) throws ResourceNotFoundException {
-        return itemService.getItemByID(id);
+    public Item getItemById(@PathVariable long id) throws ResourceNotFoundException {
+        return itemService.getItemById(id);
     }
 }

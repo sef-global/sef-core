@@ -1,30 +1,40 @@
 package org.sefglobal.core.academix.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.sefglobal.core.model.AuditModel;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "category")
+@JsonIgnoreProperties({"createdAt", "updatedAt", "subCategories"})
 public class Category extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(columnDefinition = "TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci")
+    private String name;
+
     @OneToMany(mappedBy = "category",
                cascade = CascadeType.ALL,
                orphanRemoval = true)
     private List<CategoryTranslation> translations = new ArrayList<>();
 
-    @JsonIgnore
     @OneToMany(mappedBy = "category",
                cascade = CascadeType.ALL,
                orphanRemoval = true)
-    private List<SubCategory> subCategories;
+    private List<SubCategory> subCategories = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -32,6 +42,14 @@ public class Category extends AuditModel {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<CategoryTranslation> getTranslations() {
@@ -43,8 +61,7 @@ public class Category extends AuditModel {
         translations.add(translation);
     }
 
-    public void setTranslations(
-            List<CategoryTranslation> translations) {
+    public void setTranslations(List<CategoryTranslation> translations) {
         this.translations = translations;
     }
 
