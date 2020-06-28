@@ -1,13 +1,25 @@
 package org.sefglobal.core.academix.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Getter;
+import lombok.Setter;
 import org.sefglobal.core.model.AuditModel;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.List;
 
 @Entity
 @Table(name = "language")
+@Getter @Setter
+@JsonIgnoreProperties({"createdAt", "updatedAt",
+                       "categoryTranslations", "subCategoryTranslations", "itemTranslations",
+                       "hibernateLazyInitializer", "handler"})
 public class Language extends AuditModel {
 
     @Id
@@ -17,15 +29,12 @@ public class Language extends AuditModel {
     @Column(nullable = false, unique = true)
     private String locale;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "language", orphanRemoval = true)
     private List<CategoryTranslation> categoryTranslations;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "language", orphanRemoval = true)
     private List<SubCategoryTranslation> subCategoryTranslations;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "language", orphanRemoval = true)
     private List<ItemTranslation> itemTranslations;
 
@@ -36,46 +45,16 @@ public class Language extends AuditModel {
         this.locale = locale;
     }
 
+    public Language(Long id, String locale) {
+        this.id = id;
+        this.locale = locale;
+    }
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getLocale() {
-        return locale;
-    }
-
-    public void setLocale(String locale) {
-        this.locale = locale;
-    }
-
-    public List<CategoryTranslation> getCategoryTranslations() {
-        return categoryTranslations;
-    }
-
-    public void setCategoryTranslations(
-            List<CategoryTranslation> categoryTranslations) {
-        this.categoryTranslations = categoryTranslations;
-    }
-
-    public List<SubCategoryTranslation> getSubCategoryTranslations() {
-        return subCategoryTranslations;
-    }
-
-    public void setSubCategoryTranslations(
-            List<SubCategoryTranslation> subCategoryTranslations) {
-        this.subCategoryTranslations = subCategoryTranslations;
-    }
-
-    public List<ItemTranslation> getItemTranslations() {
-        return itemTranslations;
-    }
-
-    public void setItemTranslations(
-            List<ItemTranslation> itemTranslations) {
-        this.itemTranslations = itemTranslations;
     }
 }

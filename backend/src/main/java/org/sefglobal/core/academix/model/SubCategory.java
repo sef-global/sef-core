@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,30 +16,32 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.sefglobal.core.model.AuditModel;
 
 @Entity
 @Table(name = "sub_category")
+@JsonIgnoreProperties({"createdAt", "updatedAt", "category", "items"})
 public class SubCategory extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(columnDefinition = "TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci")
+    private String name;
+
     @OneToMany(mappedBy = "subCategory",
                cascade = CascadeType.ALL,
                orphanRemoval = true)
     private List<SubCategoryTranslation> translations = new ArrayList<>();
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id",
                 referencedColumnName = "id",
                 nullable = false)
     private Category category;
 
-    @JsonIgnore
     @ManyToMany(mappedBy = "subCategories")
     private List<Item> items = new ArrayList<>();
 
@@ -48,6 +51,14 @@ public class SubCategory extends AuditModel {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<SubCategoryTranslation> getTranslations() {

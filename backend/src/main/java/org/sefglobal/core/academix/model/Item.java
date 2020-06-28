@@ -1,8 +1,6 @@
 package org.sefglobal.core.academix.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.sefglobal.core.model.AuditModel;
 
 import javax.persistence.*;
@@ -11,11 +9,18 @@ import java.util.List;
 
 @Entity
 @Table(name = "Item")
+@JsonIgnoreProperties({"createdAt", "updatedAt", "subCategories"})
 public class Item extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(columnDefinition = "TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci")
+    private String name;
+
+    @Column(columnDefinition = "TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci")
+    private String description;
 
     @Column(length = 10000)
     private String link;
@@ -25,7 +30,6 @@ public class Item extends AuditModel {
                orphanRemoval = true)
     private List<ItemTranslation> translations = new ArrayList<>();
 
-    @JsonIgnore
     @ManyToMany(cascade = {CascadeType.PERSIST,
                            CascadeType.MERGE})
     @JoinTable(name = "item_sub_category_map",
@@ -36,6 +40,22 @@ public class Item extends AuditModel {
 
     public Long getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setId(Long id) {

@@ -1,5 +1,6 @@
 package org.sefglobal.core.academix.controller;
 
+import org.sefglobal.core.academix.model.Item;
 import org.sefglobal.core.academix.projections.CustomItem;
 import org.sefglobal.core.academix.service.ItemService;
 import org.sefglobal.core.exception.ResourceNotFoundException;
@@ -15,6 +16,7 @@ public class ItemController {
         this.itemService = itemService;
     }
 
+    // TODO: 6/28/20 Remove method
     @GetMapping("/academix/sub-categories/{id}/items")
     @ResponseStatus(HttpStatus.OK)
     public Page<CustomItem> getAllItemsBySubCategoryId(@PathVariable Long id,
@@ -23,9 +25,16 @@ public class ItemController {
         return itemService.getAllItemsBySubCategory(id, pageNumber, pageSize);
     }
 
+    // TODO: 6/28/20 Remove method
     @GetMapping("/academix/items/{id}")
     @ResponseStatus(HttpStatus.OK)
     public CustomItem getItemsById(@PathVariable Long id) throws ResourceNotFoundException {
         return itemService.getItemByID(id);
+    }
+
+    @GetMapping("/academix/items/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Item getItemById(@PathVariable long id) throws ResourceNotFoundException {
+        return itemService.getItemById(id);
     }
 }

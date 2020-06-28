@@ -24,9 +24,9 @@ public class LanguageService {
     }
 
     /**
-     * Get all supported language locales
+     * Retrieves all the {@link Language} objects
      *
-     * @return {@link List} of {@link Language}
+     * @return {@link List} of {@link Language} objects
      */
     public List<Language> getAllLanguages() {
         return languageRepository.findAll();
@@ -51,9 +51,9 @@ public class LanguageService {
             log.error(msg);
             throw new BadRequestException(msg);
         }
-
         Language language = new Language(localeIdentifier);
-        languageRepository.save(language);
+        Language savedLanguage = languageRepository.save(language);
+        language.setId(savedLanguage.getId());
         return language;
     }
 

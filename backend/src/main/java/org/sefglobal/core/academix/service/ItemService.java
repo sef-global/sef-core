@@ -6,8 +6,10 @@ import org.sefglobal.core.academix.model.Item;
 import org.sefglobal.core.academix.model.Language;
 import org.sefglobal.core.academix.model.SubCategory;
 import org.sefglobal.core.academix.model.ItemTranslation;
+import org.sefglobal.core.academix.model.identifiers.ItemTranslationId;
 import org.sefglobal.core.academix.projections.CustomItem;
 import org.sefglobal.core.academix.repository.ItemRepository;
+import org.sefglobal.core.academix.repository.ItemTranslationRepository;
 import org.sefglobal.core.academix.repository.LanguageRepository;
 import org.sefglobal.core.academix.repository.SubCategoryRepository;
 import org.sefglobal.core.exception.ResourceNotFoundException;
@@ -32,13 +34,16 @@ public class ItemService {
     private final static Logger log = LoggerFactory.getLogger(ItemService.class);
     private final SubCategoryRepository subCategoryRepository;
     private final ItemRepository itemRepository;
+    private final ItemTranslationRepository itemTranslationRepository;
     public final LanguageRepository languageRepository;
 
     public ItemService(SubCategoryRepository subCategoryRepository,
                        ItemRepository itemRepository,
+                       ItemTranslationRepository itemTranslationRepository,
                        LanguageRepository languageRepository) {
         this.subCategoryRepository = subCategoryRepository;
         this.itemRepository = itemRepository;
+        this.itemTranslationRepository = itemTranslationRepository;
         this.languageRepository = languageRepository;
     }
 
@@ -49,6 +54,7 @@ public class ItemService {
      * @return {@link Item}
      * @throws ResourceNotFoundException if an item with the requested id doesn't exist
      */
+    // TODO: 6/28/20 Remove method
     public CustomItem getItemByID(Long id) throws ResourceNotFoundException{
         if (!itemRepository.existsById(id)){
             String msg = "Error, Item by id:" + id + " doesn't exist.";
@@ -67,6 +73,7 @@ public class ItemService {
      * @return {@link Page} of {@link Item}
      * @throws ResourceNotFoundException if a subcategory with the requested id doesn't exist
      */
+    // TODO: 6/27/20 Remove method
     public Page<CustomItem> getAllItemsBySubCategory(Long subCategoryId, int pageNumber, int pageSize) throws ResourceNotFoundException {
         if(!subCategoryRepository.existsById(subCategoryId)){
             String msg = "Error, Sub Category by id:" + subCategoryId + " doesn't exist.";
@@ -88,6 +95,7 @@ public class ItemService {
      * @throws ResourceNotFoundException if {@link Language} locale for a {@link ItemTranslation}
      *                                   not found
      */
+    // TODO: 6/27/20 Remove method
     public ItemDto addItem(List<Long> subCategoryIds, ItemDto itemDto)
             throws ResourceNotFoundException {
         List<SubCategory> existingSubCategories = subCategoryRepository.findAllById(subCategoryIds);
@@ -97,7 +105,6 @@ public class ItemService {
             log.error(msg);
             throw new ResourceNotFoundException(msg);
         }
-
         Item item = convertToEntity(itemDto);
         existingSubCategories.forEach(item::addSubCategory);
         Item itemSaved = itemRepository.save(item);
@@ -117,6 +124,7 @@ public class ItemService {
      * @throws ResourceNotFoundException if {@link Language} locale for a {@link ItemTranslation}
      *                                   not found
      */
+    // TODO: 6/27/20 Remove method
     public boolean updateTranslation(long id, boolean isAllReset, ItemDto itemDto)
             throws ResourceNotFoundException {
         Optional<Item> itemOptional = itemRepository.findById(id);
@@ -151,6 +159,79 @@ public class ItemService {
     }
 
     /**
+     * Retrieves an item by the requested id
+     *
+     * @param id which is the id of the requested item
+     * @return {@link Item}
+     *
+     * @throws ResourceNotFoundException if an item with the requested id doesn't exist
+     */
+    public Item getItemById(long id) throws ResourceNotFoundException {
+        Optional<Item> item = itemRepository.findById(id);
+        if (!item.isPresent()) {
+            String msg = "Error, Item by id: " + id + " doesn't exist.";
+            log.error(msg);
+            throw new ResourceNotFoundException(msg);
+        }
+        return item.get();
+    }
+
+    /**
+     * Create a new {@link Item}
+     *
+     * @param subCategoryIds which are the parent {@link SubCategory}s of {@link Item}
+     * @param item           which holds the data to be added
+     * @return the created {@link Item}
+     *
+     * @throws ResourceNotFoundException is thrown if the requesting {@link Item} doesn't exist
+     */
+    public Item addItem(List<Long> subCategoryIds, Item item) throws ResourceNotFoundException {
+        List<SubCategory> existingSubCategories = subCategoryRepository.findAllById(subCategoryIds);
+        if (subCategoryIds.size() > existingSubCategories.size()) {
+            String msg = "Error, SubCategories are invalid. One or more SubCategories doesn't " +
+                         "exist.";
+            log.error(msg);
+            throw new ResourceNotFoundException(msg);
+        }
+
+        existingSubCategories.forEach(item::addSubCategory);
+        return itemRepository.save(item);
+    }
+
+    /**
+     * Update a {@link Item} either by adding a new {@link ItemTranslation} or by editing an
+     * existing one
+     *
+     * @param id   which is the {@link Item} to be updated
+     * @param item which holds the the updated data
+     * @return {@code true} if {@link Item} gets updated
+     *
+     * @throws ResourceNotFoundException is thrown if the requesting {@link Item} doesn't exist
+     */
+    public boolean updateItem(long id, Item item)
+            throws ResourceNotFoundException {
+        boolean isUpdated = itemRepository
+                .findById(id)
+                .map(updatableItem -> {
+                    item.getTranslations().forEach(updatedTranslation -> {
+                        itemTranslationRepository
+                                .findById(new ItemTranslationId(updatableItem, updatedTranslation.getLanguage()))
+                                .ifPresent(updatableTranslation ->
+                                                   updatableTranslation.setName(updatedTranslation.getName()));
+                        updatableItem.addTranslation(updatedTranslation);
+                    });
+                    return itemRepository.save(updatableItem);
+                })
+                .isPresent();
+        if (!isUpdated) {
+            String msg = "Error, Item with id: " + id + " cannot be updated. Item doesn't exist.";
+            log.error(msg);
+            throw new ResourceNotFoundException(msg);
+        }
+        return true;
+    }
+
+    /**
      * Delete a existing {@link Item}
      *
      * @param id which is the identifier of the {@link Item}
@@ -178,6 +259,7 @@ public class ItemService {
      * @throws ResourceNotFoundException if {@link Language} locale for a {@link ItemTranslation}
      *                                   not found
      */
+    // TODO: 6/27/20 Remove method
     private Item convertToEntity(ItemDto itemDto)
             throws ResourceNotFoundException {
         Item item = new Item();
