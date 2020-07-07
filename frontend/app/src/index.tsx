@@ -14,7 +14,8 @@ import { SingleRoute } from './interfaces';
 import Categories from './scenes/Home/scenes/Category';
 import AddItem from './scenes/Home/scenes/AddItem';
 import EditItem from './scenes/Home/scenes/EditItem';
-
+import SubCategories from './scenes/Home/scenes/Category/scenes/subcategories';
+import Items from './scenes/Home/scenes/Category/scenes/subcategories/scenes';
 const routes: SingleRoute[] = [
   {
     path: '/dashboard/login',
@@ -52,14 +53,25 @@ const routes: SingleRoute[] = [
         component: AddAmbassador,
       },
       {
+        path: '/dashboard/academix/item/add',
+        exact: true,
+        component: AddItem,
+      },
+      {
         path: '/dashboard/academix/categories',
         exact: true,
         component: Categories,
       },
       {
-        path: '/dashboard/academix/item/add',
+        path: '/dashboard/academix/:categoryId/:categoryName',
         exact: true,
-        component: AddItem,
+        component: SubCategories,
+      },
+      {
+        path:
+          '/dashboard/academix/:categoryId/:categoryName/:subCategoryId/:subCategoryName',
+        exact: true,
+        component: Items,
       },
       {
         path: '/dashboard/academix/item/:id/edit',

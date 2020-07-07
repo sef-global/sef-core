@@ -21,16 +21,19 @@ export interface ItemTranslation extends Translation {
 
 export interface Category {
   id: number;
+  name: string;
   translations: Translation[];
 }
 
 export interface SubCategory {
   id: number;
+  name: string;
   translations: Translation[];
 }
 
 export interface Item {
   id: number;
+  name: string;
   link: string;
   translations: ItemTranslation[];
 }
