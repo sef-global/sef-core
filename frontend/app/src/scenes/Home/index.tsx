@@ -75,24 +75,6 @@ class Home extends React.Component<HomeProps> {
               <Menu.Item icon={<FileAddOutlined />}>
                 <Link
                   key="academix_items"
-                  to="/dashboard/academix/items"
-                  className={styles.txtWhite}
-                >
-                  Items
-                </Link>
-              </Menu.Item>
-              <Menu.Item icon={<FileAddOutlined />}>
-                <Link
-                  key="academix_items"
-                  to="/dashboard/academix/sub_categories"
-                  className={styles.txtWhite}
-                >
-                  Sub Categories
-                </Link>
-              </Menu.Item>
-              <Menu.Item icon={<FileAddOutlined />}>
-                <Link
-                  key="academix_items"
                   to="/dashboard/academix/categories"
                   className={styles.txtWhite}
                 >

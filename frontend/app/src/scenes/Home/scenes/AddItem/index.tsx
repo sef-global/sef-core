@@ -52,6 +52,7 @@ class AddItem extends React.Component<RouteComponentProps, AddItemStateProps> {
   onFinish = (values: any) => {
     this.setState({ isLoading: true });
     const item = {
+      name: values.name,
       link: values.link,
       translations: [
         {
@@ -110,7 +111,7 @@ class AddItem extends React.Component<RouteComponentProps, AddItemStateProps> {
                                 key={subCategory.id}
                                 value={subCategory.id}
                               >
-                                {subCategory.translations[0].name}
+                                {subCategory.name}
                               </Option>
                             );
                           }
