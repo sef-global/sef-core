@@ -106,9 +106,8 @@ class EditItem extends React.Component<
                       onFinish={this.onFinish}
                       initialValues={{
                         link: this.state.item?.link,
-                        name: this.state.item?.translations[0].name,
-                        description: this.state.item?.translations[0]
-                          .description,
+                        name: this.state.item?.name,
+                        description: this.state.item?.description,
                       }}
                     >
                       <Title level={3}>Link</Title>
