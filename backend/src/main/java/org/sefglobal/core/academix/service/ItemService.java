@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,13 +57,17 @@ public class ItemService {
     /**
      * Create a new {@link Item}
      *
-     * @param subCategoryIds which are the parent {@link SubCategory}s of {@link Item}
      * @param item           which holds the data to be added
      * @return the created {@link Item}
      *
      * @throws ResourceNotFoundException is thrown if the requesting {@link Item} doesn't exist
      */
-    public Item addItem(List<Long> subCategoryIds, Item item) throws ResourceNotFoundException {
+    public Item addItem(Item item) throws ResourceNotFoundException {
+        List<Long> subCategoryIds = new ArrayList<>();
+        List<SubCategory> subCategories = item.getSubCategories();
+        for (SubCategory subCategory: subCategories){
+            subCategoryIds.add(subCategory.getId());
+        }
         List<SubCategory> existingSubCategories = subCategoryRepository.findAllById(subCategoryIds);
         if (subCategoryIds.size() > existingSubCategories.size()) {
             String msg = "Error, SubCategories are invalid. One or more SubCategories doesn't " +

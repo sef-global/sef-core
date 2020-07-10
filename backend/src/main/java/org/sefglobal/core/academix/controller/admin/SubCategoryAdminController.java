@@ -24,12 +24,11 @@ public class SubCategoryAdminController {
         this.subCategoryService = subCategoryService;
     }
 
-    @PostMapping("/{categoryId}")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public SubCategory addSubCategory(@PathVariable long categoryId,
-                                      @Valid @RequestBody SubCategory subCategory)
+    public SubCategory addSubCategory(@Valid @RequestBody SubCategory subCategory)
             throws ResourceNotFoundException {
-        return subCategoryService.addSubCategory(categoryId, subCategory);
+        return subCategoryService.addSubCategory(subCategory);
     }
 
     @PutMapping("/{id}")

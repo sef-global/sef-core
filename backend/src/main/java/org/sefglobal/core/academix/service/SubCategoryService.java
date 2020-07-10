@@ -94,16 +94,16 @@ public class SubCategoryService {
 
     /**
      * Add a new {@link SubCategory}
-     *
-     * @param categoryId  which is the parent {@link Category} for {@link SubCategory}
+
      * @param subCategory which holds the data to be added
      * @return the created {@link SubCategory}
      *
      * @throws ResourceNotFoundException is thrown if the requesting {@link SubCategory} doesn't
      *                                   exist
      */
-    public SubCategory addSubCategory(long categoryId, SubCategory subCategory)
+    public SubCategory addSubCategory(SubCategory subCategory)
             throws ResourceNotFoundException {
+        long categoryId = subCategory.getCategory().getId();
         Optional<Category> category = categoryRepository.findById(categoryId);
         if (!category.isPresent()) {
             String msg = "Error, Category with id: " + categoryId + " doesn't exist. " +
