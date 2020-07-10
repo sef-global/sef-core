@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "Item")
-@JsonIgnoreProperties({"createdAt", "updatedAt", "subCategories"})
+@JsonIgnoreProperties({"createdAt", "updatedAt"})
 public class Item extends AuditModel {
 
     @Id

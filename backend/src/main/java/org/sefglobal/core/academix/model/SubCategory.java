@@ -21,7 +21,7 @@ import org.sefglobal.core.model.AuditModel;
 
 @Entity
 @Table(name = "sub_category")
-@JsonIgnoreProperties({"createdAt", "updatedAt", "category", "items"})
+@JsonIgnoreProperties({"createdAt", "updatedAt", "items"})
 public class SubCategory extends AuditModel {
 
     @Id
@@ -41,6 +41,7 @@ public class SubCategory extends AuditModel {
     @JoinColumn(name = "category_id",
                 referencedColumnName = "id",
                 nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Category category;
 
     @ManyToMany(mappedBy = "subCategories")
