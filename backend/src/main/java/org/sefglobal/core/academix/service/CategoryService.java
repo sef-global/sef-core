@@ -3,7 +3,6 @@ package org.sefglobal.core.academix.service;
 import org.sefglobal.core.academix.model.Category;
 import org.sefglobal.core.academix.model.CategoryTranslation;
 import org.sefglobal.core.academix.model.SubCategory;
-import org.sefglobal.core.academix.model.identifiers.CategoryTranslationId;
 import org.sefglobal.core.academix.repository.CategoryRepository;
 import org.sefglobal.core.academix.repository.CategoryTranslationRepository;
 import org.sefglobal.core.academix.repository.LanguageRepository;
@@ -21,16 +20,13 @@ public class CategoryService {
 
     private final static Logger log = LoggerFactory.getLogger(CategoryService.class);
     private final CategoryRepository categoryRepository;
-    private final CategoryTranslationRepository categoryTranslationRepository;
     private final SubCategoryRepository subCategoryRepository;
     public final LanguageRepository languageRepository;
 
     public CategoryService(CategoryRepository categoryRepository,
-                           CategoryTranslationRepository categoryTranslationRepository,
                            SubCategoryRepository subCategoryRepository,
                            LanguageRepository languageRepository) {
         this.categoryRepository = categoryRepository;
-        this.categoryTranslationRepository = categoryTranslationRepository;
         this.subCategoryRepository = subCategoryRepository;
         this.languageRepository = languageRepository;
     }
@@ -97,31 +93,18 @@ public class CategoryService {
      *
      * @param id       which is the {@link Category} to be updated
      * @param category which is the updated data
-     * @return {@code true} if {@link Category} gets updated
+     * @return the updated {@link Category}
      *
      * @throws ResourceNotFoundException is thrown if the requesting {@link Category} doesn't exist
      */
-    public boolean updateCategory(long id, Category category) throws ResourceNotFoundException {
-        boolean isUpdated = categoryRepository
-                .findById(id)
-                .map(updatableCategory -> {
-                    category.getTranslations().forEach(updatedTranslation -> {
-                        categoryTranslationRepository
-                                .findById(new CategoryTranslationId(updatableCategory, updatedTranslation.getLanguage()))
-                                .ifPresent(updatableTranslation ->
-                                                   updatableTranslation.setName(updatedTranslation.getName()));
-                        updatableCategory.addTranslation(updatedTranslation);
-                    });
-                    return categoryRepository.save(updatableCategory);
-                })
-                .isPresent();
-        if (!isUpdated) {
-            String msg = "Error, Category with id: " + id + " cannot be updated." +
-                         " Category doesn't exist.";
+    public Category updateCategory(long id, Category category) throws ResourceNotFoundException {
+        if (!categoryRepository.existsById(id)) {
+            String msg = "Error, Category with id: " + id + " cannot be updated. " +
+                    "Category doesn't exist.";
             log.error(msg);
             throw new ResourceNotFoundException(msg);
         }
-        return true;
+        return categoryRepository.save(category);
     }
 
     /**

@@ -32,7 +32,7 @@ public class ItemAdminController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public boolean updateItem(@PathVariable long id,
+    public Item updateItem(@PathVariable long id,
                               @Valid @RequestBody Item item)
             throws ResourceNotFoundException {
         return itemService.updateItem(id, item);

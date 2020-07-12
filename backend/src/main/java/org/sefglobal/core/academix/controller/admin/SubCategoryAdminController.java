@@ -33,7 +33,7 @@ public class SubCategoryAdminController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public boolean updateSubCategory(@PathVariable long id,
+    public SubCategory updateSubCategory(@PathVariable long id,
                                      @Valid @RequestBody SubCategory subCategory)
             throws ResourceNotFoundException {
         return subCategoryService.updateSubCategory(id, subCategory);

@@ -3,9 +3,7 @@ package org.sefglobal.core.academix.service;
 import org.sefglobal.core.academix.model.Item;
 import org.sefglobal.core.academix.model.SubCategory;
 import org.sefglobal.core.academix.model.ItemTranslation;
-import org.sefglobal.core.academix.model.identifiers.ItemTranslationId;
 import org.sefglobal.core.academix.repository.ItemRepository;
-import org.sefglobal.core.academix.repository.ItemTranslationRepository;
 import org.sefglobal.core.academix.repository.LanguageRepository;
 import org.sefglobal.core.academix.repository.SubCategoryRepository;
 import org.sefglobal.core.exception.ResourceNotFoundException;
@@ -23,16 +21,13 @@ public class ItemService {
     private final static Logger log = LoggerFactory.getLogger(ItemService.class);
     private final SubCategoryRepository subCategoryRepository;
     private final ItemRepository itemRepository;
-    private final ItemTranslationRepository itemTranslationRepository;
     public final LanguageRepository languageRepository;
 
     public ItemService(SubCategoryRepository subCategoryRepository,
                        ItemRepository itemRepository,
-                       ItemTranslationRepository itemTranslationRepository,
                        LanguageRepository languageRepository) {
         this.subCategoryRepository = subCategoryRepository;
         this.itemRepository = itemRepository;
-        this.itemTranslationRepository = itemTranslationRepository;
         this.languageRepository = languageRepository;
     }
 
@@ -75,8 +70,7 @@ public class ItemService {
             log.error(msg);
             throw new ResourceNotFoundException(msg);
         }
-
-        existingSubCategories.forEach(item::addSubCategory);
+        item.setSubCategories(existingSubCategories);
         return itemRepository.save(item);
     }
 
@@ -86,31 +80,35 @@ public class ItemService {
      *
      * @param id   which is the {@link Item} to be updated
      * @param item which holds the the updated data
-     * @return {@code true} if {@link Item} gets updated
+     * @return the updated {@link Item}
      *
      * @throws ResourceNotFoundException is thrown if the requesting {@link Item} doesn't exist
+     * @throws ResourceNotFoundException is thrown if the requesting {@link SubCategory} doesn't
+     * exist
      */
-    public boolean updateItem(long id, Item item)
+    public Item updateItem(long id, Item item)
             throws ResourceNotFoundException {
-        boolean isUpdated = itemRepository
-                .findById(id)
-                .map(updatableItem -> {
-                    item.getTranslations().forEach(updatedTranslation -> {
-                        itemTranslationRepository
-                                .findById(new ItemTranslationId(updatableItem, updatedTranslation.getLanguage()))
-                                .ifPresent(updatableTranslation ->
-                                                   updatableTranslation.setName(updatedTranslation.getName()));
-                        updatableItem.addTranslation(updatedTranslation);
-                    });
-                    return itemRepository.save(updatableItem);
-                })
-                .isPresent();
-        if (!isUpdated) {
-            String msg = "Error, Item with id: " + id + " cannot be updated. Item doesn't exist.";
+        if (!itemRepository.existsById(id)) {
+            String msg = "Error, Item with id: " + id + " cannot be updated. Item " +
+                    "doesn't exist.";
             log.error(msg);
             throw new ResourceNotFoundException(msg);
         }
-        return true;
+        List<Long> subCategoryIds = new ArrayList<>();
+        List<SubCategory> subCategories = item.getSubCategories();
+        for (SubCategory subCategory : subCategories) {
+            subCategoryIds.add(subCategory.getId());
+        }
+        List<SubCategory> existingSubCategories = subCategoryRepository.findAllById(subCategoryIds);
+        if (subCategoryIds.size() > existingSubCategories.size()) {
+            String msg =
+                    "Error, SubCategories are invalid. One or more SubCategories doesn't " +
+                            "exist.";
+            log.error(msg);
+            throw new ResourceNotFoundException(msg);
+        }
+        item.setSubCategories(existingSubCategories);
+        return itemRepository.save(item);
     }
 
     /**
