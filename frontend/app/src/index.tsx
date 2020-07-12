@@ -13,6 +13,7 @@ import AddAmbassador from './scenes/Home/scenes/Ambassadors/scenes/AddAmbassador
 import { SingleRoute } from './interfaces';
 import Categories from './scenes/Home/scenes/Category';
 import AddItem from './scenes/Home/scenes/AddItem';
+import AddCategory from './scenes/Home/scenes/AddCategory';
 import EditItem from './scenes/Home/scenes/EditItem';
 import SubCategories from './scenes/Home/scenes/Category/scenes/subcategories';
 import Items from './scenes/Home/scenes/Category/scenes/subcategories/scenes';
@@ -62,6 +63,11 @@ const routes: SingleRoute[] = [
         path: '/dashboard/academix/sub-category/add',
         exact: true,
         component: AddSubCategory,
+      },
+      {
+        path: '/dashboard/academix/category/add',
+        exact: true,
+        component: AddCategory,
       },
       {
         path: '/dashboard/academix/categories',
