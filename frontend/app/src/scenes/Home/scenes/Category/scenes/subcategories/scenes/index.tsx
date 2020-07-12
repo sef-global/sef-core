@@ -1,39 +1,21 @@
 import React from 'react';
 import axios, { AxiosResponse } from 'axios';
 import { ItemStateProps, ItemPayload, ItemUrlParams } from './interfaces';
-import { Col, Row, Table, Typography } from 'antd';
+import { Button, Col, Divider, Popconfirm, Row, Table, Typography } from 'antd';
 import styles from './styles.css';
 import { handleApiError } from '../../../../../../../services/util/errorHandler';
 const { Title } = Typography;
 import { RouteComponentProps } from 'react-router';
 
-const columns = [
-  {
-    title: 'Id',
-    dataIndex: 'id',
-    key: 'id',
-  },
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    key: 'edit',
-    // eslint-disable-next-line react/display-name
-    render: () => <a>Edit</a>,
-  },
-];
-
 class Items extends React.Component<
   RouteComponentProps<ItemUrlParams>,
   ItemStateProps
 > {
-  SubCategoryId: string;
+  subCategoryId: string;
   pageSize: number;
   constructor(props: RouteComponentProps<ItemUrlParams>) {
     super(props);
-    this.SubCategoryId = this.props.match.params.subCategoryId;
+    this.subCategoryId = this.props.match.params.subCategoryId;
     this.pageSize = 8;
     this.state = {
       isLoading: false,
@@ -57,7 +39,7 @@ class Items extends React.Component<
       .get(
         window.location.origin +
           '/core/academix/sub-categories/' +
-          `${this.SubCategoryId}/items?pageNumber=${pageNumber}&pageSize=${this.pageSize}`
+          `${this.subCategoryId}/items?pageNumber=${pageNumber}&pageSize=${this.pageSize}`
       )
       .then((result: AxiosResponse<ItemPayload>) => {
         if (result.status == 200) {
@@ -79,6 +61,59 @@ class Items extends React.Component<
       });
   };
 
+  handleDelete = (id: number) => {
+    this.setState({ isLoading: true });
+    axios
+      .delete(window.location.origin + `/core/academix/admin/items/${id}`)
+      .then((result) => {
+        if (result.status == 204) {
+          this.setState({ isLoading: false });
+          this.fetchItems();
+        } else {
+          throw new Error();
+        }
+      })
+      .catch((error) => {
+        handleApiError(
+          error,
+          'Something went wrong when trying to delete the item'
+        );
+        this.setState({ isLoading: false });
+      });
+  };
+
+  columns = [
+    {
+      title: 'Id',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      key: 'edit',
+      dataIndex: 'id',
+      // eslint-disable-next-line react/display-name
+      render: (id: number) => (
+        <div>
+          <Button type="link">Edit</Button>
+          <Divider type="vertical" />
+          <Popconfirm
+            title="Sure to delete"
+            onConfirm={() => this.handleDelete(id)}
+          >
+            <Button type="link" danger>
+              Delete
+            </Button>
+          </Popconfirm>
+        </div>
+      ),
+    },
+  ];
+
   render() {
     return (
       <Row className={styles.content}>
@@ -86,7 +121,7 @@ class Items extends React.Component<
           <Title>Items</Title>
           <Table
             rowKey="id"
-            columns={columns}
+            columns={this.columns}
             dataSource={this.state.items}
             loading={this.state.isLoading}
             className={styles.column}
