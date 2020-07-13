@@ -2,37 +2,12 @@ import React from 'react';
 import axios, { AxiosResponse } from 'axios';
 import { CategoryStateProps } from './interfaces';
 import { Category } from '../../interfaces';
-import { Col, Row, Table, Typography } from 'antd';
+import { Button, Col, Divider, Popconfirm, Row, Table, Typography } from 'antd';
 import styles from './styles.css';
 import { handleApiError } from '../../../../services/util/errorHandler';
 import { Link } from 'react-router-dom';
 const { Title } = Typography;
 
-const columns = [
-  {
-    title: 'Id',
-    dataIndex: 'id',
-    key: 'id',
-  },
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-    // eslint-disable-next-line react/display-name
-    render: (text: string, record: Category) => {
-      const categoryName = text
-        .trim()
-        .replace(/\s+|\//g, '-')
-        .toLowerCase();
-      return <Link to={`${record.id}/${categoryName}`}>{text}</Link>;
-    },
-  },
-  {
-    key: 'edit',
-    // eslint-disable-next-line react/display-name
-    render: () => <a>Edit</a>,
-  },
-];
 class Categories extends React.Component<{}, CategoryStateProps> {
   constructor(props: {}) {
     super(props);
@@ -41,8 +16,12 @@ class Categories extends React.Component<{}, CategoryStateProps> {
       categories: [],
     };
   }
-
   componentDidMount() {
+    this.fetchCategories();
+  }
+
+  fetchCategories() {
+    this.setState({ isLoading: true });
     axios
       .get(window.location.origin + '/core/academix/categories')
       .then((result: AxiosResponse<Category[]>) => {
@@ -61,6 +40,68 @@ class Categories extends React.Component<{}, CategoryStateProps> {
         this.setState({ isLoading: false });
       });
   }
+
+  handleDelete = (id: number) => {
+    this.setState({ isLoading: true });
+    axios
+      .delete(window.location.origin + `/core/academix/admin/categories/${id}`)
+      .then((result) => {
+        if (result.status == 204) {
+          this.setState({ isLoading: false });
+          this.fetchCategories();
+        } else {
+          throw new Error();
+        }
+      })
+      .catch((error) => {
+        handleApiError(
+          error,
+          'Something went wrong when trying to delete the category'
+        );
+        this.setState({ isLoading: false });
+      });
+  };
+
+  columns = [
+    {
+      title: 'Id',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+      // eslint-disable-next-line react/display-name
+      render: (name: string, record: Category) => {
+        const categoryName = name
+          .trim()
+          .replace(/\s+|\//g, '-')
+          .toLowerCase();
+        return <Link to={`${record.id}/${categoryName}`}>{name}</Link>;
+      },
+    },
+    {
+      key: 'edit',
+      dataIndex: 'id',
+      // eslint-disable-next-line react/display-name
+      render: (id: number) => (
+        <div>
+          <Button type="link">Edit</Button>
+          <Divider type="vertical" />
+          <Popconfirm
+            title="Sure to delete"
+            onConfirm={() => this.handleDelete(id)}
+          >
+            <Button type="link" danger>
+              Delete
+            </Button>
+          </Popconfirm>
+        </div>
+      ),
+    },
+  ];
+
   render() {
     return (
       <Row className={styles.content}>
@@ -68,7 +109,7 @@ class Categories extends React.Component<{}, CategoryStateProps> {
           <Title>Categories</Title>
           <Table
             rowKey="id"
-            columns={columns}
+            columns={this.columns}
             dataSource={this.state.categories}
             loading={this.state.isLoading}
             className={styles.column}

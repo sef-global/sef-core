@@ -1,47 +1,46 @@
-:local .logo {
+.logo {
     margin: 16px;
 }
 
-:local .logo img{
+.logo img{
     width: 90%;
     padding-bottom: 24px;
 }
 
-:local .header {
+.header {
     background: white;
     padding-right: 0;
     z-index: 1;
     box-shadow: 0 2px 8px #f0f1f2;
 }
 
-:local .content {
+.content {
     min-height: 100vh;
     background-color: white;
 }
 
-:local .rightAlignedMenu {
+.rightAlignedMenu {
     float: right;
 }
 
-:local .avatar {
+.avatar {
     background-color: #F27781;
 }
 
-:local .txtWhite {
+.txtWhite {
     color: white;
 }
 
-:local .innerContent {
+.innerContent {
     margin: 48px 24px;
 }
 
-:local .formItem {
+.formItem {
     margin-top: 12px;
 }
 
 @media only screen and (min-width: 992px) {
-    :local .content, :local .header {
+    .content, .header {
         margin-left: 200px;
     }
 }
-
