@@ -99,23 +99,23 @@ class Home extends React.Component<HomeProps> {
                 }
               >
                 <Menu.ItemGroup title="Multiverse">
-                  <Menu.Item>
+                  <Menu.Item key="add_university">
                     <Link to="/dashboard/universities/add/">University</Link>
                   </Menu.Item>
-                  <Menu.Item>
+                  <Menu.Item key="add_ambassador">
                     <Link to="/dashboard/ambassadors/add">Ambassador</Link>
                   </Menu.Item>
                 </Menu.ItemGroup>
                 <Menu.ItemGroup title="Academix">
-                  <Menu.Item>
+                  <Menu.Item key="add_item">
                     <Link to="/dashboard/academix/item/add">Item</Link>
                   </Menu.Item>
-                  <Menu.Item>
+                  <Menu.Item key="add_sub_category">
                     <Link to="/dashboard/academix/sub-category/add">
                       Subcategory
                     </Link>
                   </Menu.Item>
-                  <Menu.Item>
+                  <Menu.Item key="add_category">
                     <Link to="/dashboard/academix/category/add">Category</Link>
                   </Menu.Item>
                 </Menu.ItemGroup>

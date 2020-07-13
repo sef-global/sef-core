@@ -32,7 +32,7 @@ class AddCategory extends React.Component<
   onFinish = (values: any) => {
     this.setState({ isLoading: true });
     axios
-      .post(`${window.origin}/core/academix/admin/categories`, values)
+      .post(window.location.origin + '/core/academix/admin/categories', values)
       .then((res: AxiosResponse<Category>) => {
         if (res.status == 201) {
           this.setState({ isLoading: false });
@@ -41,6 +41,8 @@ class AddCategory extends React.Component<
             description: 'Successfully Created a Category',
           });
           this.props.history.push('/dashboard/academix/categories');
+        } else {
+          throw new Error();
         }
       })
       .catch((error) => {
