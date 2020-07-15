@@ -4,7 +4,7 @@ import org.sefglobal.core.academix.model.Category;
 import org.sefglobal.core.academix.model.Item;
 import org.sefglobal.core.academix.model.SubCategory;
 import org.sefglobal.core.academix.model.SubCategoryTranslation;
-import org.sefglobal.core.academix.model.identifiers.SubCategoryTranslationId;
+import org.sefglobal.core.academix.model.projection.CustomItem;
 import org.sefglobal.core.academix.repository.CategoryRepository;
 import org.sefglobal.core.academix.repository.ItemRepository;
 import org.sefglobal.core.academix.repository.LanguageRepository;
@@ -26,18 +26,15 @@ public class SubCategoryService {
     private final static Logger log = LoggerFactory.getLogger(SubCategoryService.class);
     private final CategoryRepository categoryRepository;
     private final SubCategoryRepository subCategoryRepository;
-    private final SubCategoryTranslationRepository subCategoryTranslationRepository;
     private final ItemRepository itemRepository;
     public final LanguageRepository languageRepository;
 
     public SubCategoryService(CategoryRepository categoryRepository,
                               SubCategoryRepository subCategoryRepository,
-                              SubCategoryTranslationRepository subCategoryTranslationRepository,
                               ItemRepository itemRepository,
                               LanguageRepository languageRepository) {
         this.categoryRepository = categoryRepository;
         this.subCategoryRepository = subCategoryRepository;
-        this.subCategoryTranslationRepository = subCategoryTranslationRepository;
         this.itemRepository = itemRepository;
         this.languageRepository = languageRepository;
     }
@@ -80,7 +77,7 @@ public class SubCategoryService {
      * @throws ResourceNotFoundException if the requesting {@link SubCategory} to filter {@link
      *                                   Item} objects doesn't exist
      */
-    public Page<Item> getItemsBySubCategoryId(long id, int pageNumber, int pageSize)
+    public Page<CustomItem> getItemsBySubCategoryId(long id, int pageNumber, int pageSize)
             throws ResourceNotFoundException {
         Optional<SubCategory> subCategory = subCategoryRepository.findById(id);
         if (!subCategory.isPresent()) {
@@ -94,16 +91,16 @@ public class SubCategoryService {
 
     /**
      * Add a new {@link SubCategory}
-     *
-     * @param categoryId  which is the parent {@link Category} for {@link SubCategory}
+
      * @param subCategory which holds the data to be added
      * @return the created {@link SubCategory}
      *
      * @throws ResourceNotFoundException is thrown if the requesting {@link SubCategory} doesn't
      *                                   exist
      */
-    public SubCategory addSubCategory(long categoryId, SubCategory subCategory)
+    public SubCategory addSubCategory(SubCategory subCategory)
             throws ResourceNotFoundException {
+        long categoryId = subCategory.getCategory().getId();
         Optional<Category> category = categoryRepository.findById(categoryId);
         if (!category.isPresent()) {
             String msg = "Error, Category with id: " + categoryId + " doesn't exist. " +
@@ -121,32 +118,29 @@ public class SubCategoryService {
      *
      * @param id          which is the {@link SubCategory} to be updated
      * @param subCategory which is the updated data
-     * @return {@code true} if {@link SubCategory} gets updated
+     * @return the updated {@link SubCategory}
      *
      * @throws ResourceNotFoundException is thrown if the requesting {@link Category} not found
+     * @throws ResourceNotFoundException is thrown if the requesting {@link SubCategory} not found
      */
-    public boolean updateSubCategory(long id, SubCategory subCategory)
+    public SubCategory updateSubCategory(long id, SubCategory subCategory)
             throws ResourceNotFoundException {
-        boolean isUpdated = subCategoryRepository
-                .findById(id)
-                .map(updatableSubCategory -> {
-                    subCategory.getTranslations().forEach(updatedTranslation -> {
-                        subCategoryTranslationRepository
-                                .findById(new SubCategoryTranslationId(updatableSubCategory, updatedTranslation.getLanguage()))
-                                .ifPresent(updatableTranslation ->
-                                                   updatableTranslation.setName(updatedTranslation.getName()));
-                        updatableSubCategory.addTranslation(updatedTranslation);
-                    });
-                    return subCategoryRepository.save(updatableSubCategory);
-                })
-                .isPresent();
-        if (!isUpdated) {
+        if (!subCategoryRepository.existsById(id)) {
             String msg = "Error, SubCategory with id: " + id + " cannot be updated. SubCategory " +
                          "doesn't exist.";
             log.error(msg);
             throw new ResourceNotFoundException(msg);
         }
-        return true;
+        long categoryId = subCategory.getCategory().getId();
+        Optional<Category> category = categoryRepository.findById(categoryId);
+        if (!category.isPresent()) {
+            String msg = "Error, Category with id: " + categoryId + " doesn't exist. " +
+                    "SubCategory's parent Category is invalid.";
+            log.error(msg);
+            throw new ResourceNotFoundException(msg);
+        }
+        subCategory.setCategory(category.get());
+        return subCategoryRepository.save(subCategory);
     }
 
     /**

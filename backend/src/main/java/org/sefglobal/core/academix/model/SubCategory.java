@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,7 +20,7 @@ import org.sefglobal.core.model.AuditModel;
 
 @Entity
 @Table(name = "sub_category")
-@JsonIgnoreProperties({"createdAt", "updatedAt", "category", "items"})
+@JsonIgnoreProperties({"createdAt", "updatedAt", "items"})
 public class SubCategory extends AuditModel {
 
     @Id
@@ -37,7 +36,7 @@ public class SubCategory extends AuditModel {
                orphanRemoval = true)
     private List<SubCategoryTranslation> translations = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "category_id",
                 referencedColumnName = "id",
                 nullable = false)

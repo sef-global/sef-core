@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "Item")
-@JsonIgnoreProperties({"createdAt", "updatedAt", "subCategories"})
+@JsonIgnoreProperties({"createdAt", "updatedAt"})
 public class Item extends AuditModel {
 
     @Id
@@ -32,8 +32,7 @@ public class Item extends AuditModel {
                orphanRemoval = true)
     private List<ItemTranslation> translations = new ArrayList<>();
 
-    @ManyToMany(cascade = {CascadeType.PERSIST,
-                           CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.MERGE})
     @JoinTable(name = "item_sub_category_map",
                joinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"),
                inverseJoinColumns = @JoinColumn(name = "sub_category_id",

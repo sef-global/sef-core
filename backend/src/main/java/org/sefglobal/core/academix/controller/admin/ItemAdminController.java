@@ -10,12 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/academix/admin/items")
@@ -28,14 +26,13 @@ public class ItemAdminController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Item addItem(@RequestParam List<Long> subCategoryIds,
-                        @Valid @RequestBody Item item) throws ResourceNotFoundException {
-        return itemService.addItem(subCategoryIds, item);
+    public Item addItem(@Valid @RequestBody Item item) throws ResourceNotFoundException {
+        return itemService.addItem(item);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public boolean updateItem(@PathVariable long id,
+    public Item updateItem(@PathVariable long id,
                               @Valid @RequestBody Item item)
             throws ResourceNotFoundException {
         return itemService.updateItem(id, item);
