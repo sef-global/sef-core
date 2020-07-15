@@ -29,11 +29,13 @@ export interface SubCategory {
   id: number;
   name: string;
   translations: Translation[];
+  category: Category;
 }
 
 export interface Item {
   id: number;
   name: string;
   link: string;
+  description: string;
   translations: ItemTranslation[];
 }

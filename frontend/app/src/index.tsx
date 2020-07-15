@@ -16,6 +16,7 @@ import AddItem from './scenes/Home/scenes/AddItem';
 import EditItem from './scenes/Home/scenes/EditItem';
 import SubCategories from './scenes/Home/scenes/Category/scenes/subcategories';
 import Items from './scenes/Home/scenes/Category/scenes/subcategories/scenes';
+import AddSubCategory from './scenes/Home/scenes/AddSubCategory';
 const routes: SingleRoute[] = [
   {
     path: '/dashboard/login',
@@ -56,6 +57,11 @@ const routes: SingleRoute[] = [
         path: '/dashboard/academix/item/add',
         exact: true,
         component: AddItem,
+      },
+      {
+        path: '/dashboard/academix/sub-category/add',
+        exact: true,
+        component: AddSubCategory,
       },
       {
         path: '/dashboard/academix/categories',

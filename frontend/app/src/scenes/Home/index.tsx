@@ -37,7 +37,11 @@ class Home extends React.Component<HomeProps> {
               </div>
             </Link>
           </div>
-          <Menu theme="dark" mode="inline" defaultOpenKeys={['multiverse']}>
+          <Menu
+            theme="dark"
+            mode="inline"
+            defaultOpenKeys={['multiverse', 'academix']}
+          >
             <Menu.Item key="dashboard" icon={<AreaChartOutlined />}>
               <Link to="/dashboard/home/" className={styles.txtWhite}>
                 Dashboard
@@ -74,7 +78,7 @@ class Home extends React.Component<HomeProps> {
             >
               <Menu.Item icon={<FileAddOutlined />}>
                 <Link
-                  key="academix_items"
+                  key="academix_categories"
                   to="/dashboard/academix/categories"
                   className={styles.txtWhite}
                 >
@@ -99,6 +103,11 @@ class Home extends React.Component<HomeProps> {
                 </Menu.Item>
                 <Menu.Item>
                   <Link to="/dashboard/ambassadors/add">Ambassador</Link>
+                </Menu.Item>
+                <Menu.Item>
+                  <Link to="/dashboard/academix/sub-category/add">
+                    Subcategory
+                  </Link>
                 </Menu.Item>
                 <Menu.Item>
                   <Link to="/dashboard/academix/item/add">Item</Link>

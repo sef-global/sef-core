@@ -39,6 +39,8 @@ class AddItem extends React.Component<RouteComponentProps, AddItemStateProps> {
       .then((result: AxiosResponse<SubCategory[]>) => {
         if (result.status == 200) {
           this.setState({ subCategories: result.data, isLoading: false });
+        } else {
+          throw new Error();
         }
       })
       .catch((error) =>
@@ -51,22 +53,21 @@ class AddItem extends React.Component<RouteComponentProps, AddItemStateProps> {
 
   onFinish = (values: any) => {
     this.setState({ isLoading: true });
+    const subCategoryIds: { id: number }[] = [];
+    values.subCategories.map((subCategoryId: number) =>
+      subCategoryIds.push({
+        id: subCategoryId,
+      })
+    );
     const item = {
       name: values.name,
       link: values.link,
-      translations: [
-        {
-          name: values.name,
-          description: values.description,
-          language: 'en',
-        },
-      ],
+      description: values.description,
+      subCategories: subCategoryIds,
     };
+
     axios
-      .post(
-        `${window.location.origin}/core/academix/admin/items?subCategoryIds=${values.subCategories}`,
-        item
-      )
+      .post(window.location.origin + '/core/academix/admin/items', item)
       .then((res: AxiosResponse<Item>) => {
         if (res.status == 201) {
           this.setState({ isLoading: false });
@@ -74,7 +75,9 @@ class AddItem extends React.Component<RouteComponentProps, AddItemStateProps> {
             message: 'Success!',
             description: 'Successfully Created an Item',
           });
-          this.props.history.push(`${res.data.id}/edit`);
+          this.props.history.push('/dashboard/academix/categories');
+        } else {
+          throw new Error();
         }
       })
       .catch((error) => {
@@ -101,7 +104,7 @@ class AddItem extends React.Component<RouteComponentProps, AddItemStateProps> {
                     >
                       <Select
                         mode="multiple"
-                        style={{ width: '100%' }}
+                        className={mainStyles.formSelect}
                         placeholder="Please select"
                       >
                         {this.state.subCategories.map(
@@ -111,7 +114,7 @@ class AddItem extends React.Component<RouteComponentProps, AddItemStateProps> {
                                 key={subCategory.id}
                                 value={subCategory.id}
                               >
-                                {subCategory.name}
+                                {subCategory.category.name} : {subCategory.name}
                               </Option>
                             );
                           }

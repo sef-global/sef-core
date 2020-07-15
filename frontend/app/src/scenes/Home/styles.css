@@ -39,6 +39,10 @@
     margin-top: 12px;
 }
 
+.formSelect {
+    width: 100%;
+}
+
 @media only screen and (min-width: 992px) {
     .content, .header {
         margin-left: 200px;
