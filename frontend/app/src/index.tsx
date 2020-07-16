@@ -16,7 +16,7 @@ import AddItem from './scenes/Home/scenes/AddItem';
 import EditItem from './scenes/Home/scenes/EditItem';
 import SubCategories from './scenes/Home/scenes/Category/scenes/subcategories';
 import Items from './scenes/Home/scenes/Category/scenes/subcategories/scenes';
-import AddSubCategory from './scenes/Home/scenes/AddSubCategory';
+import UpsertSubCategory from './scenes/Home/scenes/UpsertSubCategory';
 const routes: SingleRoute[] = [
   {
     path: '/dashboard/login',
@@ -61,7 +61,7 @@ const routes: SingleRoute[] = [
       {
         path: '/dashboard/academix/sub-category/add',
         exact: true,
-        component: AddSubCategory,
+        component: UpsertSubCategory,
       },
       {
         path: '/dashboard/academix/categories',
@@ -83,6 +83,11 @@ const routes: SingleRoute[] = [
         path: '/dashboard/academix/item/:id/edit',
         exact: true,
         component: EditItem,
+      },
+      {
+        path: '/dashboard/academix/sub-category/:subCategoryId/edit',
+        exact: true,
+        component: UpsertSubCategory,
       },
     ],
   },
