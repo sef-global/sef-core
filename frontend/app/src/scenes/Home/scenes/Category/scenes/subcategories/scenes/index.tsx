@@ -6,6 +6,7 @@ import styles from './styles.css';
 import { handleApiError } from '../../../../../../../services/util/errorHandler';
 const { Title } = Typography;
 import { RouteComponentProps } from 'react-router';
+import { Link } from 'react-router-dom';
 
 class Items extends React.Component<
   RouteComponentProps<ItemUrlParams>,
@@ -99,7 +100,9 @@ class Items extends React.Component<
       // eslint-disable-next-line react/display-name
       render: (id: number) => (
         <div>
-          <Button type="link">Edit</Button>
+          <Button type="link">
+            <Link to={`/dashboard/academix/item/${id}/edit`}>Edit</Link>
+          </Button>
           <Divider type="vertical" />
           <Popconfirm
             title="Sure to delete"

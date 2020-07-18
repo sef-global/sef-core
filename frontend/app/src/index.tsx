@@ -12,9 +12,8 @@ import AddUniversity from './scenes/Home/scenes/Universities/scenes/AddUniversit
 import AddAmbassador from './scenes/Home/scenes/Ambassadors/scenes/AddAmbassador';
 import { SingleRoute } from './interfaces';
 import Categories from './scenes/Home/scenes/Category';
-import AddItem from './scenes/Home/scenes/AddItem';
+import UpsertItem from './scenes/Home/scenes/UpsertItem';
 import AddCategory from './scenes/Home/scenes/AddCategory';
-import EditItem from './scenes/Home/scenes/EditItem';
 import SubCategories from './scenes/Home/scenes/Category/scenes/subcategories';
 import Items from './scenes/Home/scenes/Category/scenes/subcategories/scenes';
 import AddSubCategory from './scenes/Home/scenes/AddSubCategory';
@@ -57,7 +56,7 @@ const routes: SingleRoute[] = [
       {
         path: '/dashboard/academix/item/add',
         exact: true,
-        component: AddItem,
+        component: UpsertItem,
       },
       {
         path: '/dashboard/academix/sub-category/add',
@@ -86,9 +85,9 @@ const routes: SingleRoute[] = [
         component: Items,
       },
       {
-        path: '/dashboard/academix/item/:id/edit',
+        path: '/dashboard/academix/item/:itemId/edit',
         exact: true,
-        component: EditItem,
+        component: UpsertItem,
       },
     ],
   },
