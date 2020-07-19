@@ -104,7 +104,9 @@ class SubCategories extends React.Component<
       // eslint-disable-next-line react/display-name
       render: (id: number) => (
         <div>
-          <Button type="link">Edit</Button>
+          <Button type="link">
+            <Link to={`/dashboard/academix/sub-category/${id}/edit`}>Edit</Link>
+          </Button>
           <Divider type="vertical" />
           <Popconfirm
             title="Sure to delete"

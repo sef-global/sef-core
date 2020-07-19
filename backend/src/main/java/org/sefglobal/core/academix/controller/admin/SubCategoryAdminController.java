@@ -32,7 +32,7 @@ public class SubCategoryAdminController {
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.OK)
     public SubCategory updateSubCategory(@PathVariable long id,
                                      @Valid @RequestBody SubCategory subCategory)
             throws ResourceNotFoundException {

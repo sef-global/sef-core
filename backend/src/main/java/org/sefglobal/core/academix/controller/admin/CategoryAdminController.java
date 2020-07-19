@@ -31,7 +31,7 @@ public class CategoryAdminController {
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.OK)
     public Category updateCategory(@PathVariable long id,
                                   @Valid @RequestBody Category category)
             throws ResourceNotFoundException {
