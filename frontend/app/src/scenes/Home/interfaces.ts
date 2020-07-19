@@ -37,5 +37,6 @@ export interface Item {
   name: string;
   link: string;
   description: string;
+  subCategories: SubCategory[];
   translations: ItemTranslation[];
 }
