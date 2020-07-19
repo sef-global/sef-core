@@ -1,4 +1,4 @@
-import { Item } from '../../../../../interfaces';
+import { Item, SubCategory } from '../../../../../interfaces';
 
 export interface ItemStateProps {
   items: Item[];
@@ -8,6 +8,7 @@ export interface ItemStateProps {
     pageSize: number,
     total: number,
   };
+  subCategory: SubCategory | null;
 }
 
 export interface ItemPayload {

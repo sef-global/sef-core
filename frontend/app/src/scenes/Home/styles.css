@@ -48,3 +48,11 @@
         margin-left: 200px;
     }
 }
+
+:global h1.ant-typography, :global h2.ant-typography, :global h3.ant-typography, :global h4.ant-typography {
+    font-weight: 300;
+}
+
+.mainTitle {
+    margin-top: 5px;
+}

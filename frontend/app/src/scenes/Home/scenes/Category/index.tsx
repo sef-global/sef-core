@@ -3,6 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 import { CategoryStateProps } from './interfaces';
 import { Category } from '../../interfaces';
 import {
+  Breadcrumb,
   Button,
   Col,
   Divider,
@@ -16,6 +17,7 @@ import styles from './styles.css';
 import { handleApiError } from '../../../../services/util/errorHandler';
 import { Link } from 'react-router-dom';
 const { Title } = Typography;
+import { HomeOutlined } from '@ant-design/icons';
 
 class Categories extends React.Component<{}, CategoryStateProps> {
   constructor(props: {}) {
@@ -115,6 +117,14 @@ class Categories extends React.Component<{}, CategoryStateProps> {
     return (
       <Row className={styles.content}>
         <Col md={24} lg={{ span: 20, offset: 2 }}>
+          <Breadcrumb>
+            <Breadcrumb.Item>
+              <Link to={'/dashboard/home'}>
+                <HomeOutlined />
+              </Link>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>AcadeMix</Breadcrumb.Item>
+          </Breadcrumb>
           <Space className={styles.space}>
             <Title>Categories</Title>
             <Link

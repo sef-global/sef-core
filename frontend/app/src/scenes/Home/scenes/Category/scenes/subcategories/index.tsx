@@ -1,13 +1,24 @@
 import React from 'react';
 import axios, { AxiosResponse } from 'axios';
 import { CategoryStateProps, CategoryUrlParams } from './interfaces';
-import { SubCategory } from '../../../../interfaces';
-import { Button, Col, Divider, Popconfirm, Row, Table, Typography } from 'antd';
+import { Category, SubCategory } from '../../../../interfaces';
+import {
+  Breadcrumb,
+  Button,
+  Col,
+  Divider,
+  Popconfirm,
+  Row,
+  Table,
+  Typography,
+} from 'antd';
 import styles from './styles.css';
+import mainStyles from '../../../../styles.css';
 import { handleApiError } from '../../../../../../services/util/errorHandler';
 import { Link } from 'react-router-dom';
 const { Title } = Typography;
 import { RouteComponentProps } from 'react-router';
+import { HomeOutlined } from '@ant-design/icons';
 
 class SubCategories extends React.Component<
   RouteComponentProps<CategoryUrlParams>,
@@ -20,10 +31,12 @@ class SubCategories extends React.Component<
     this.state = {
       isLoading: false,
       subCategories: [],
+      category: null,
     };
   }
   componentDidMount() {
     this.fetchSubCategories();
+    this.fetchCategory();
   }
 
   fetchSubCategories() {
@@ -47,6 +60,27 @@ class SubCategories extends React.Component<
           'Something went wrong when trying to load sub-categories'
         );
         this.setState({ isLoading: false });
+      });
+  }
+
+  // Fetch category details to show the category name in the breadcrumb
+  fetchCategory() {
+    axios
+      .get(
+        window.location.origin + `/core/academix/categories/${this.categoryId}`
+      )
+      .then((result: AxiosResponse<Category>) => {
+        if (result.status == 200) {
+          this.setState({
+            category: result.data,
+          });
+        }
+      })
+      .catch((error) => {
+        handleApiError(
+          error,
+          'Something went wrong when trying to load the category details'
+        );
       });
   }
 
@@ -122,10 +156,25 @@ class SubCategories extends React.Component<
   ];
 
   render() {
+    const { category } = this.state;
     return (
       <Row className={styles.content}>
         <Col md={24} lg={{ span: 20, offset: 2 }}>
-          <Title>Subcategories</Title>
+          <Breadcrumb>
+            <Breadcrumb.Item>
+              <Link to={'/dashboard/home'}>
+                <HomeOutlined />
+              </Link>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <Link to={'/dashboard/academix/categories'}>AcadeMix</Link>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              {/* Checks if the category details are available to render the category name */}
+              <span>{category != null && category.name}</span>
+            </Breadcrumb.Item>
+          </Breadcrumb>
+          <Title className={mainStyles.mainTitle}>Subcategories</Title>
           <Table
             rowKey="id"
             columns={this.columns}
