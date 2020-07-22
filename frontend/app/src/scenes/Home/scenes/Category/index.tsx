@@ -96,7 +96,9 @@ class Categories extends React.Component<{}, CategoryStateProps> {
       // eslint-disable-next-line react/display-name
       render: (id: number) => (
         <div>
-          <Button type="link">Edit</Button>
+          <Link to={`/dashboard/academix/category/${id}/edit`}>
+            <Button type="link">Edit</Button>
+          </Link>
           <Divider type="vertical" />
           <Popconfirm
             title="Sure to delete"
