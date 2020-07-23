@@ -129,14 +129,6 @@ class Categories extends React.Component<{}, CategoryStateProps> {
           </Breadcrumb>
           <Space className={styles.space}>
             <Title>Categories</Title>
-            <Link
-              className={styles.button}
-              to={'/dashboard/academix/category/add'}
-            >
-              <Button type="primary" shape="round">
-                Add New Category
-              </Button>
-            </Link>
           </Space>
           <Table
             rowKey="id"
