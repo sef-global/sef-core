@@ -113,18 +113,18 @@ class UpsertCategory extends React.Component<
             ) : (
               <Title>Add a new Category</Title>
             )}
-            {/* Renders the form straight away if the componentType is 'add',
+            <Spin tip="Loading..." spinning={this.state.isLoading}>
+              {/* Renders the form straight away if the componentType is 'add',
             if it's 'edit' waits for the component to get the category
             and then renders the pre-data-filled-form*/}
-            {(this.state.category != null || this.componentType == 'add') && (
-              <Row>
-                <Col md={12}>
-                  <Form
-                    size={'large'}
-                    initialValues={{ name: this.state.category?.name }}
-                    onFinish={this.onFinish}
-                  >
-                    <Spin spinning={this.state.isLoading}>
+              {(this.state.category != null || this.componentType == 'add') && (
+                <Row>
+                  <Col md={12}>
+                    <Form
+                      size={'large'}
+                      initialValues={{ name: this.state.category?.name }}
+                      onFinish={this.onFinish}
+                    >
                       <Title level={3}>Name</Title>
                       <Text>Name of the Category</Text>
                       <Form.Item
@@ -144,11 +144,11 @@ class UpsertCategory extends React.Component<
                           Save
                         </Button>
                       </Form.Item>
-                    </Spin>
-                  </Form>
-                </Col>
-              </Row>
-            )}
+                    </Form>
+                  </Col>
+                </Row>
+              )}
+            </Spin>
           </Col>
         </Row>
       </div>
