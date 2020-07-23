@@ -1,12 +1,24 @@
 import React from 'react';
 import axios, { AxiosResponse } from 'axios';
 import { ItemStateProps, ItemPayload, ItemUrlParams } from './interfaces';
-import { Button, Col, Divider, Popconfirm, Row, Table, Typography } from 'antd';
+import {
+  Breadcrumb,
+  Button,
+  Col,
+  Divider,
+  Popconfirm,
+  Row,
+  Table,
+  Typography,
+} from 'antd';
 import styles from './styles.css';
+import mainStyles from '../../../../../styles.css';
 import { handleApiError } from '../../../../../../../services/util/errorHandler';
 const { Title } = Typography;
 import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
+import { SubCategory } from '../../../../../interfaces';
+import { HomeOutlined } from '@ant-design/icons';
 
 class Items extends React.Component<
   RouteComponentProps<ItemUrlParams>,
@@ -26,11 +38,13 @@ class Items extends React.Component<
         total: 0,
         pageSize: this.pageSize,
       },
+      subCategory: null,
     };
   }
 
   componentDidMount() {
     this.fetchItems();
+    this.fetchSubCategory();
   }
 
   fetchItems = (pageNo = 1) => {
@@ -61,6 +75,30 @@ class Items extends React.Component<
         this.setState({ isLoading: false });
       });
   };
+
+  // Fetch subcategory details to show the category and the subcategory names in the breadcrumb
+  fetchSubCategory() {
+    axios
+      .get(
+        window.location.origin +
+          `/core/academix/sub-categories/${this.subCategoryId}`
+      )
+      .then((result: AxiosResponse<SubCategory>) => {
+        if (result.status == 200) {
+          this.setState({
+            subCategory: result.data,
+          });
+        } else {
+          throw new Error();
+        }
+      })
+      .catch((error) => {
+        handleApiError(
+          error,
+          'Something went wrong when trying to load the subcategory details'
+        );
+      });
+  }
 
   handleDelete = (id: number) => {
     this.setState({ isLoading: true });
@@ -118,10 +156,43 @@ class Items extends React.Component<
   ];
 
   render() {
+    const { subCategory } = this.state;
+    // Transform the category name to an url friendly to avoid url breaks
+    const categoryName = subCategory?.category.name
+      .trim()
+      .replace(/\s+|\//g, '-')
+      .toLowerCase();
     return (
       <Row className={styles.content}>
         <Col md={24} lg={{ span: 20, offset: 2 }}>
-          <Title>Items</Title>
+          <Breadcrumb>
+            <Breadcrumb.Item>
+              <Link to={'/dashboard/home'}>
+                <HomeOutlined />
+              </Link>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <Link to={'/dashboard/academix/categories'}>AcadeMix</Link>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              {/* Checks if the subcategory details are available to render the category name */}
+              {subCategory != null && (
+                <Link
+                  to={
+                    '/dashboard/academix/' +
+                    `${subCategory.category.id}/${categoryName}`
+                  }
+                >
+                  <span> {subCategory.category.name}</span>
+                </Link>
+              )}
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              {/* Checks if the subcategory details are available to render the subcategory name */}
+              {subCategory != null && subCategory.name}
+            </Breadcrumb.Item>
+          </Breadcrumb>
+          <Title className={mainStyles.mainTitle}>Items</Title>
           <Table
             rowKey="id"
             columns={this.columns}
