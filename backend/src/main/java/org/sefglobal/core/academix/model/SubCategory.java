@@ -36,7 +36,7 @@ public class SubCategory extends AuditModel {
                orphanRemoval = true)
     private List<SubCategoryTranslation> translations = new ArrayList<>();
 
-    @ManyToOne(cascade = {CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "category_id",
                 referencedColumnName = "id",
                 nullable = false)
@@ -89,5 +89,11 @@ public class SubCategory extends AuditModel {
 
     public void setItems(List<Item> items) {
         this.items = items;
+    }
+
+    public void removeItems(List<Item> items) {
+        for (Item item : items) {
+            item.getSubCategories().remove(this);
+        }
     }
 }

@@ -9,7 +9,6 @@ import org.sefglobal.core.academix.repository.CategoryRepository;
 import org.sefglobal.core.academix.repository.ItemRepository;
 import org.sefglobal.core.academix.repository.LanguageRepository;
 import org.sefglobal.core.academix.repository.SubCategoryRepository;
-import org.sefglobal.core.academix.repository.SubCategoryTranslationRepository;
 import org.sefglobal.core.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -152,12 +151,17 @@ public class SubCategoryService {
      * @throws ResourceNotFoundException if {@link SubCategory} for {@code id} doesn't exist
      */
     public boolean deleteSubCategory(long id) throws ResourceNotFoundException {
-        if (!subCategoryRepository.existsById(id)) {
+        Optional<SubCategory> optionalSubCategory = subCategoryRepository.findById(id);
+        if (!optionalSubCategory.isPresent()) {
             String msg = "Error, SubCategory with id: " + id + " cannot be deleted." +
                          " SubCategory doesn't exist.";
             log.error(msg);
             throw new ResourceNotFoundException(msg);
         }
+
+        SubCategory subCategory = optionalSubCategory.get();
+        List<Item> items = itemRepository.getAllBySubCategories(subCategory);
+        subCategory.removeItems(items);
         subCategoryRepository.deleteById(id);
         return true;
     }

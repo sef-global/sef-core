@@ -2,9 +2,10 @@ package org.sefglobal.core.academix.service;
 
 import org.sefglobal.core.academix.model.Category;
 import org.sefglobal.core.academix.model.CategoryTranslation;
+import org.sefglobal.core.academix.model.Item;
 import org.sefglobal.core.academix.model.SubCategory;
 import org.sefglobal.core.academix.repository.CategoryRepository;
-import org.sefglobal.core.academix.repository.CategoryTranslationRepository;
+import org.sefglobal.core.academix.repository.ItemRepository;
 import org.sefglobal.core.academix.repository.LanguageRepository;
 import org.sefglobal.core.academix.repository.SubCategoryRepository;
 import org.sefglobal.core.exception.ResourceNotFoundException;
@@ -22,13 +23,16 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final SubCategoryRepository subCategoryRepository;
     public final LanguageRepository languageRepository;
+    public final ItemRepository itemRepository;
 
     public CategoryService(CategoryRepository categoryRepository,
                            SubCategoryRepository subCategoryRepository,
-                           LanguageRepository languageRepository) {
+                           LanguageRepository languageRepository,
+                           ItemRepository itemRepository) {
         this.categoryRepository = categoryRepository;
         this.subCategoryRepository = subCategoryRepository;
         this.languageRepository = languageRepository;
+        this.itemRepository = itemRepository;
     }
 
     /**
@@ -116,11 +120,17 @@ public class CategoryService {
      * @throws ResourceNotFoundException if {@link Category} for {@code id} doesn't exist
      */
     public boolean deleteCategory(long id) throws ResourceNotFoundException {
-        if (!categoryRepository.existsById(id)) {
+        Optional<Category> optionalCategory = categoryRepository.findById(id);
+        if (!optionalCategory.isPresent()) {
             String msg = "Error, Category with id: " + id + " cannot be deleted. " +
                          "Category doesn't exist.";
             log.error(msg);
             throw new ResourceNotFoundException(msg);
+        }
+        List<SubCategory> subCategories = optionalCategory.get().getSubCategories();
+        for (SubCategory subCategory : subCategories) {
+            List<Item> items = itemRepository.getAllBySubCategories(subCategory);
+            subCategory.removeItems(items);
         }
         categoryRepository.deleteById(id);
         return true;

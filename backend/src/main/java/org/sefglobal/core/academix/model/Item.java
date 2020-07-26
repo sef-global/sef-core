@@ -32,7 +32,7 @@ public class Item extends AuditModel {
                orphanRemoval = true)
     private List<ItemTranslation> translations = new ArrayList<>();
 
-    @ManyToMany(cascade = {CascadeType.MERGE})
+    @ManyToMany
     @JoinTable(name = "item_sub_category_map",
                joinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"),
                inverseJoinColumns = @JoinColumn(name = "sub_category_id",
