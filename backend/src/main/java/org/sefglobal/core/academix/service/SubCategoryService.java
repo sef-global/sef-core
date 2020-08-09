@@ -7,7 +7,6 @@ import org.sefglobal.core.academix.model.SubCategoryTranslation;
 import org.sefglobal.core.academix.model.projection.CustomItem;
 import org.sefglobal.core.academix.repository.CategoryRepository;
 import org.sefglobal.core.academix.repository.ItemRepository;
-import org.sefglobal.core.academix.repository.LanguageRepository;
 import org.sefglobal.core.academix.repository.SubCategoryRepository;
 import org.sefglobal.core.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
@@ -26,16 +25,13 @@ public class SubCategoryService {
     private final CategoryRepository categoryRepository;
     private final SubCategoryRepository subCategoryRepository;
     private final ItemRepository itemRepository;
-    public final LanguageRepository languageRepository;
 
     public SubCategoryService(CategoryRepository categoryRepository,
                               SubCategoryRepository subCategoryRepository,
-                              ItemRepository itemRepository,
-                              LanguageRepository languageRepository) {
+                              ItemRepository itemRepository) {
         this.categoryRepository = categoryRepository;
         this.subCategoryRepository = subCategoryRepository;
         this.itemRepository = itemRepository;
-        this.languageRepository = languageRepository;
     }
 
     /**
@@ -108,6 +104,8 @@ public class SubCategoryService {
             throw new ResourceNotFoundException(msg);
         }
         subCategory.setCategory(category.get());
+        subCategory.getTranslations()
+                .forEach(subCategoryTranslation -> subCategoryTranslation.setSubCategory(subCategory));
         return subCategoryRepository.save(subCategory);
     }
 
@@ -130,6 +128,7 @@ public class SubCategoryService {
             log.error(msg);
             throw new ResourceNotFoundException(msg);
         }
+        subCategory.setId(id);
         long categoryId = subCategory.getCategory().getId();
         Optional<Category> category = categoryRepository.findById(categoryId);
         if (!category.isPresent()) {
@@ -139,6 +138,8 @@ public class SubCategoryService {
             throw new ResourceNotFoundException(msg);
         }
         subCategory.setCategory(category.get());
+        subCategory.getTranslations()
+                .forEach(subCategoryTranslation -> subCategoryTranslation.setSubCategory(subCategory));
         return subCategoryRepository.save(subCategory);
     }
 

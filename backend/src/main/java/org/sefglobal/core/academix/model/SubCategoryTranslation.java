@@ -3,6 +3,7 @@ package org.sefglobal.core.academix.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.sefglobal.core.academix.model.identifiers.SubCategoryTranslationId;
 import org.sefglobal.core.model.AuditModel;
+import org.sefglobal.core.academix.util.Language;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +13,8 @@ import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Enumerated;
+import javax.persistence.EnumType;
 
 @Entity
 @Table(name = "sub_category_translation")
@@ -27,10 +30,9 @@ public class SubCategoryTranslation extends AuditModel {
     private SubCategory subCategory;
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "language_id",
-                referencedColumnName = "id",
-                nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(length = 5,
+            nullable = false)
     private Language language;
 
     @Column(columnDefinition = "TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci")

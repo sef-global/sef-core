@@ -1,6 +1,6 @@
 package org.sefglobal.core.academix.model.identifiers;
 
-import org.sefglobal.core.academix.model.Language;
+import org.sefglobal.core.academix.util.Language;
 import org.sefglobal.core.academix.model.SubCategory;
 
 import java.io.Serializable;

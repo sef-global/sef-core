@@ -4,7 +4,6 @@ import org.sefglobal.core.academix.model.Item;
 import org.sefglobal.core.academix.model.SubCategory;
 import org.sefglobal.core.academix.model.ItemTranslation;
 import org.sefglobal.core.academix.repository.ItemRepository;
-import org.sefglobal.core.academix.repository.LanguageRepository;
 import org.sefglobal.core.academix.repository.SubCategoryRepository;
 import org.sefglobal.core.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
@@ -21,14 +20,11 @@ public class ItemService {
     private final static Logger log = LoggerFactory.getLogger(ItemService.class);
     private final SubCategoryRepository subCategoryRepository;
     private final ItemRepository itemRepository;
-    public final LanguageRepository languageRepository;
 
     public ItemService(SubCategoryRepository subCategoryRepository,
-                       ItemRepository itemRepository,
-                       LanguageRepository languageRepository) {
+                       ItemRepository itemRepository) {
         this.subCategoryRepository = subCategoryRepository;
         this.itemRepository = itemRepository;
-        this.languageRepository = languageRepository;
     }
 
     /**
@@ -71,6 +67,7 @@ public class ItemService {
             throw new ResourceNotFoundException(msg);
         }
         item.setSubCategories(existingSubCategories);
+        item.getTranslations().forEach(itemTranslation -> itemTranslation.setItem(item));
         return itemRepository.save(item);
     }
 
@@ -94,6 +91,7 @@ public class ItemService {
             log.error(msg);
             throw new ResourceNotFoundException(msg);
         }
+        item.setId(id);
         List<Long> subCategoryIds = new ArrayList<>();
         List<SubCategory> subCategories = item.getSubCategories();
         for (SubCategory subCategory : subCategories) {
@@ -108,6 +106,7 @@ public class ItemService {
             throw new ResourceNotFoundException(msg);
         }
         item.setSubCategories(existingSubCategories);
+        item.getTranslations().forEach(itemTranslation -> itemTranslation.setItem(item));
         return itemRepository.save(item);
     }
 
