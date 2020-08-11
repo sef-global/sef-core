@@ -1,14 +1,12 @@
-package org.sefglobal.core.service;
+package org.sefglobal.core.fellowship.service;
 
 import org.sefglobal.core.exception.ResourceNotFoundException;
-import org.sefglobal.core.model.Certificate;
-import org.sefglobal.core.repository.CertificateRepository;
+import org.sefglobal.core.fellowship.model.Certificate;
+import org.sefglobal.core.fellowship.repository.CertificateRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class CertificateService {
