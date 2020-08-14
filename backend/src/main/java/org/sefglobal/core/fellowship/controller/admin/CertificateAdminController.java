@@ -1,21 +1,19 @@
-package org.sefglobal.core.controller;
+package org.sefglobal.core.fellowship.controller.admin;
 
 import org.sefglobal.core.exception.ResourceNotFoundException;
-import org.sefglobal.core.model.Certificate;
-import org.sefglobal.core.service.CertificateService;
+import org.sefglobal.core.fellowship.model.Certificate;
+import org.sefglobal.core.fellowship.service.CertificateService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/fellowship/certificates")
-public class CertificateController {
+@RequestMapping("/fellowship/admin/certificates")
+public class CertificateAdminController {
 
     private final CertificateService certificateService;
 
-    public CertificateController(CertificateService certificateService) {
+    public CertificateAdminController(CertificateService certificateService) {
         this.certificateService = certificateService;
     }
 
@@ -23,12 +21,6 @@ public class CertificateController {
     @ResponseStatus(HttpStatus.OK)
     public Page<Certificate> getCertificates(@RequestParam int pageNumber, int pageSize){
         return certificateService.getCertificates(pageNumber, pageSize);
-    }
-
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Certificate getCertificateById(@PathVariable(value = "id") Integer id) throws ResourceNotFoundException{
-        return certificateService.getCertificateById(id);
     }
 
     @PostMapping
@@ -39,7 +31,7 @@ public class CertificateController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public String deleteCertificateById(@PathVariable(value = "id") Integer id) throws ResourceNotFoundException {
+    public String deleteCertificateById(@PathVariable Integer id) throws ResourceNotFoundException {
         return certificateService.deleteCertificate(id);
     }
 }
