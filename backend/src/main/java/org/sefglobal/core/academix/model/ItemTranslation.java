@@ -3,6 +3,7 @@ package org.sefglobal.core.academix.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.sefglobal.core.academix.model.identifiers.ItemTranslationId;
 import org.sefglobal.core.model.AuditModel;
+import org.sefglobal.core.academix.util.Language;
 
 import javax.persistence.*;
 
@@ -20,10 +21,9 @@ public class ItemTranslation extends AuditModel {
     private Item item;
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "language_id",
-                referencedColumnName = "id",
-                nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(length = 5,
+            nullable = false)
     private Language language;
 
     @Column(columnDefinition = "TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci")

@@ -6,7 +6,6 @@ import org.sefglobal.core.academix.model.Item;
 import org.sefglobal.core.academix.model.SubCategory;
 import org.sefglobal.core.academix.repository.CategoryRepository;
 import org.sefglobal.core.academix.repository.ItemRepository;
-import org.sefglobal.core.academix.repository.LanguageRepository;
 import org.sefglobal.core.academix.repository.SubCategoryRepository;
 import org.sefglobal.core.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
@@ -22,16 +21,13 @@ public class CategoryService {
     private final static Logger log = LoggerFactory.getLogger(CategoryService.class);
     private final CategoryRepository categoryRepository;
     private final SubCategoryRepository subCategoryRepository;
-    public final LanguageRepository languageRepository;
     public final ItemRepository itemRepository;
 
     public CategoryService(CategoryRepository categoryRepository,
                            SubCategoryRepository subCategoryRepository,
-                           LanguageRepository languageRepository,
                            ItemRepository itemRepository) {
         this.categoryRepository = categoryRepository;
         this.subCategoryRepository = subCategoryRepository;
-        this.languageRepository = languageRepository;
         this.itemRepository = itemRepository;
     }
 
@@ -88,6 +84,8 @@ public class CategoryService {
      * @return the created {@link Category}
      */
     public Category addCategory(Category category) {
+        category.getTranslations()
+                .forEach(categoryTranslation -> categoryTranslation.setCategory(category));
         return categoryRepository.save(category);
     }
 
@@ -108,6 +106,9 @@ public class CategoryService {
             log.error(msg);
             throw new ResourceNotFoundException(msg);
         }
+        category.setId(id);
+        category.getTranslations()
+                .forEach(categoryTranslation -> categoryTranslation.setCategory(category));
         return categoryRepository.save(category);
     }
 
