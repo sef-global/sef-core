@@ -106,7 +106,7 @@ class UpsertCertificate extends React.Component<
         this.setState({ isLoading: false });
         handleApiError(
           error,
-          'Something went wrong when creating the certificate'
+          'Something went wrong when saving the certificate'
         );
       });
   };
