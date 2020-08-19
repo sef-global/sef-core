@@ -10,6 +10,7 @@ import {
   TeamOutlined,
   BookOutlined,
   FileAddOutlined,
+  SolutionOutlined,
 } from '@ant-design/icons';
 import { Switch, Link } from 'react-router-dom';
 import RouteWithSubRoutes from '../../components/RouteWithSubRoutes';
@@ -40,7 +41,7 @@ class Home extends React.Component<HomeProps> {
           <Menu
             theme="dark"
             mode="inline"
-            defaultOpenKeys={['multiverse', 'academix']}
+            defaultOpenKeys={['multiverse', 'academix', 'fellowship']}
           >
             <Menu.Item key="dashboard" icon={<AreaChartOutlined />}>
               <Link to="/dashboard/home/" className={styles.txtWhite}>
@@ -86,6 +87,21 @@ class Home extends React.Component<HomeProps> {
                 </Link>
               </Menu.Item>
             </Menu.SubMenu>
+            <Menu.SubMenu
+              key="fellowship"
+              icon={<BookOutlined />}
+              title="Fellowship"
+            >
+              <Menu.Item icon={<SolutionOutlined />}>
+                <Link
+                  key="fellowship_certificates"
+                  to="/dashboard/fellowship/certificates"
+                  className={styles.txtWhite}
+                >
+                  Certificates
+                </Link>
+              </Menu.Item>
+            </Menu.SubMenu>
           </Menu>
         </Sider>
         <Layout>
@@ -117,6 +133,13 @@ class Home extends React.Component<HomeProps> {
                   </Menu.Item>
                   <Menu.Item key="add_category">
                     <Link to="/dashboard/academix/category/add">Category</Link>
+                  </Menu.Item>
+                </Menu.ItemGroup>
+                <Menu.ItemGroup title="Fellowship">
+                  <Menu.Item key="add_item">
+                    <Link to="/dashboard/fellowship/certificate/add">
+                      Certificates
+                    </Link>
                   </Menu.Item>
                 </Menu.ItemGroup>
               </Menu.SubMenu>

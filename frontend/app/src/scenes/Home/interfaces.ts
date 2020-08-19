@@ -40,3 +40,8 @@ export interface Item {
   subCategories: SubCategory[];
   translations: ItemTranslation[];
 }
+
+export interface Certificate {
+  id: number;
+  name: string;
+}
