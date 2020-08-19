@@ -10,9 +10,10 @@ import {
   Row,
   Space,
   Table,
+  Tooltip,
   Typography,
 } from 'antd';
-import { CopyOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, LinkOutlined } from '@ant-design/icons';
 import { CertificatesStateProps, CertificatesPayload } from './interfaces';
 import { Link } from 'react-router-dom';
 import { handleApiError } from '../../../../services/util/errorHandler';
@@ -105,34 +106,50 @@ class Certificates extends React.Component<{}, CertificatesStateProps> {
     },
     {
       key: 'edit',
+      // width: '40%',
       dataIndex: 'id',
       // eslint-disable-next-line react/display-name
       render: (id: number) => (
         <div>
+          <CopyToClipboard
+            text={
+              window.location.origin + '/fellowship/?id=' + btoa(id.toString())
+            }
+            onCopy={() =>
+              notification.success({
+                message: 'Link Copied!',
+                description:
+                  window.location.origin +
+                  '/fellowship/?id=' +
+                  btoa(id.toString()),
+              })
+            }
+          >
+            <Tooltip placement="topLeft" title="Copy public link">
+              <Button type={'link'}>
+                <LinkOutlined />
+              </Button>
+            </Tooltip>
+          </CopyToClipboard>
+          <Divider type="vertical" />
           <Link to={`/dashboard/fellowship/certificate/${id}/edit`}>
-            <Button type="link">Edit</Button>
+            <Tooltip placement="topLeft" title="Edit">
+              <Button type="link">
+                <EditOutlined />
+              </Button>
+            </Tooltip>
           </Link>
           <Divider type="vertical" />
           <Popconfirm
             title="Sure to delete"
             onConfirm={() => this.handleDelete(id)}
           >
-            <Button type="link">Delete</Button>
+            <Tooltip placement="topLeft" title="Delete">
+              <Button type="link" danger>
+                <DeleteOutlined />
+              </Button>
+            </Tooltip>
           </Popconfirm>
-          <Divider type="vertical" />
-          <CopyToClipboard
-            text={window.location.origin + '/fellowship/?' + id}
-            onCopy={() =>
-              notification.success({
-                message: 'Copied!',
-                description: window.location.origin + '/fellowship/?' + id,
-              })
-            }
-          >
-            <Button type={'link'}>
-              <CopyOutlined />
-            </Button>
-          </CopyToClipboard>
         </div>
       ),
     },

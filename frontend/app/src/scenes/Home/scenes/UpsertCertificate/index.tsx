@@ -117,9 +117,9 @@ class UpsertCertificate extends React.Component<
         <Row className={mainStyles.innerContent}>
           <Col lg={24} xl={{ span: 20, offset: 2 }}>
             {this.componentType == 'edit' ? (
-              <Title>Update Category</Title>
+              <Title>Edit Certificate</Title>
             ) : (
-              <Title>Add a new Category</Title>
+              <Title>Add a new Certificate</Title>
             )}
             <Spin tip="Loading..." spinning={this.state.isLoading}>
               {/* Renders the form straight away if the componentType is 'add',

@@ -34,4 +34,12 @@ public class CertificateAdminController {
     public String deleteCertificateById(@PathVariable Integer id) throws ResourceNotFoundException {
         return certificateService.deleteCertificate(id);
     }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Certificate updateCertificateById(@PathVariable Integer id,
+                                             @RequestBody Certificate certificate)
+            throws ResourceNotFoundException {
+        return certificateService.updateCertificate(id, certificate);
+    }
 }
