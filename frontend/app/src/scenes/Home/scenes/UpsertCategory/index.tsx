@@ -8,15 +8,20 @@ import {
   Row,
   Spin,
   Typography,
+  Card,
+  Select,
 } from 'antd';
+import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import mainStyles from '../../styles.css';
 import { AddCategoryStateProps, CategoryUrlParams } from './interfaces';
 import { RouteComponentProps, withRouter } from 'react-router';
 import axios, { AxiosResponse, Method } from 'axios';
-import { Category } from '../../interfaces';
+import { Category, Translation } from '../../interfaces';
+import translationMetaData from './metaData';
 import { handleApiError } from '../../../../services/util/errorHandler';
 
 const { Title, Text } = Typography;
+const { Option } = Select;
 
 class UpsertCategory extends React.Component<
   RouteComponentProps<CategoryUrlParams>,
@@ -33,6 +38,8 @@ class UpsertCategory extends React.Component<
     this.state = {
       isLoading: false,
       category: null,
+      isInLanguageSelectionMode: false,
+      translations: new Map(),
     };
   }
 
@@ -50,7 +57,18 @@ class UpsertCategory extends React.Component<
       )
       .then((result: AxiosResponse<Category>) => {
         if (result.status == 200) {
-          this.setState({ isLoading: false, category: result.data });
+          // Gets the translations for the fetched category and setting them to the state using a map
+          const categoryTranslations = new Map();
+          result.data.translations.forEach((translation) => {
+            categoryTranslations.set(translation.language, {
+              name: translation.name,
+            });
+          });
+          this.setState({
+            translations: categoryTranslations,
+            isLoading: false,
+            category: result.data,
+          });
         } else {
           throw new Error();
         }
@@ -63,6 +81,15 @@ class UpsertCategory extends React.Component<
 
   onFinish = (values: any) => {
     let statusCode: number, method: Method, url: string;
+    const translations: Translation[] = [];
+    // Creating the translation array to send it with the payload
+    Array.from(this.state.translations.entries()).map((translationEntry) => {
+      const translation = {
+        language: translationEntry[0],
+        name: translationEntry[1].name,
+      };
+      translations.push(translation);
+    });
     this.setState({ isLoading: true });
     // Checks for the component type and sets the relevant statusCode, url and method to call
     if (this.componentType == 'edit') {
@@ -80,6 +107,7 @@ class UpsertCategory extends React.Component<
       data: {
         id: this.categoryId,
         name: values.name,
+        translations: translations,
       },
     })
       .then((res: AxiosResponse<Category>) => {
@@ -103,6 +131,38 @@ class UpsertCategory extends React.Component<
       });
   };
 
+  switchToLanguageSelectionMode = () => {
+    this.setState({
+      isInLanguageSelectionMode: true,
+    });
+  };
+
+  // Checks for the selected language to render the relevant language card
+  handleLanguageSelect = (language: string) => {
+    const clonedTranslations = new Map(this.state.translations);
+    clonedTranslations.set(language, { name: '' });
+    this.setState({
+      isInLanguageSelectionMode: false,
+      translations: clonedTranslations,
+    });
+  };
+
+  handleTranslationChange = (languageEnum: string, value: string) => {
+    const clonedTranslations = new Map(this.state.translations);
+    clonedTranslations.set(languageEnum, {
+      name: value,
+    });
+    this.setState({
+      translations: clonedTranslations,
+    });
+  };
+
+  handleRemoveTranslation = (language: string) => {
+    const clonedTranslations = new Map(this.state.translations);
+    clonedTranslations.delete(language);
+    this.setState({ translations: clonedTranslations });
+  };
+
   render() {
     return (
       <div>
@@ -122,7 +182,9 @@ class UpsertCategory extends React.Component<
                   <Col md={12}>
                     <Form
                       size={'large'}
-                      initialValues={{ name: this.state.category?.name }}
+                      initialValues={{
+                        name: this.state.category?.name,
+                      }}
                       onFinish={this.onFinish}
                     >
                       <Title level={3}>Name</Title>
@@ -139,7 +201,88 @@ class UpsertCategory extends React.Component<
                       >
                         <Input placeholder="ex: KG & Primary" />
                       </Form.Item>
-                      <Form.Item>
+                      <Title level={3}>Translations</Title>
+                      {Array.from(this.state.translations.entries()).map(
+                        (translationEntry) => {
+                          const translationMeta = translationMetaData.get(
+                            translationEntry[0]
+                          );
+                          if (translationMeta) {
+                            return (
+                              <Card
+                                key={translationEntry[0]}
+                                className={mainStyles.cardMargin}
+                              >
+                                <Button
+                                  danger
+                                  type="link"
+                                  className={mainStyles.closeButton}
+                                  onClick={() =>
+                                    this.handleRemoveTranslation(
+                                      translationEntry[0]
+                                    )
+                                  }
+                                >
+                                  <DeleteOutlined />
+                                </Button>
+                                <Title level={3}>{translationMeta.name}</Title>
+                                <Text>{translationMeta.title}</Text>
+                                <Input
+                                  className={mainStyles.formItem}
+                                  value={translationEntry[1].name}
+                                  placeholder={translationMeta.placeholder}
+                                  onChange={(event) =>
+                                    this.handleTranslationChange(
+                                      translationEntry[0],
+                                      event.target.value
+                                    )
+                                  }
+                                />
+                              </Card>
+                            );
+                          }
+                        }
+                      )}
+                      {this.state.isInLanguageSelectionMode && (
+                        <>
+                          <Title level={4}>Select a language</Title>
+                          <Select
+                            placeholder="Please select a language"
+                            className={mainStyles.formSelect}
+                            onSelect={this.handleLanguageSelect}
+                          >
+                            {Array.from(translationMetaData.entries()).map(
+                              (translationMetaData) => {
+                                return (
+                                  <Option
+                                    key={translationMetaData[0]}
+                                    value={translationMetaData[0]}
+                                    className={mainStyles.formSelect}
+                                    disabled={this.state.translations.has(
+                                      translationMetaData[0]
+                                    )}
+                                  >
+                                    {translationMetaData[1].name}
+                                  </Option>
+                                );
+                              }
+                            )}
+                          </Select>
+                        </>
+                      )}
+                      {!this.state.isInLanguageSelectionMode &&
+                        this.state.translations.size !=
+                          translationMetaData.size && (
+                          <Button
+                            className={mainStyles.addTranslation}
+                            type="link"
+                            onClick={this.switchToLanguageSelectionMode}
+                          >
+                            <PlusOutlined />
+                            Add a Translation
+                          </Button>
+                        )}
+                      <Form.Item className={mainStyles.saveButton}>
                         <Button type="primary" htmlType="submit">
                           Save
                         </Button>
