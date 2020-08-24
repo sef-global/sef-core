@@ -17,6 +17,8 @@ import UpsertCategory from './scenes/Home/scenes/UpsertCategory';
 import SubCategories from './scenes/Home/scenes/Category/scenes/subcategories';
 import Items from './scenes/Home/scenes/Category/scenes/subcategories/scenes';
 import UpsertSubCategory from './scenes/Home/scenes/UpsertSubCategory';
+import Certificates from './scenes/Home/scenes/Certificates';
+import UpsertCertificate from './scenes/Home/scenes/UpsertCertificate';
 const routes: SingleRoute[] = [
   {
     path: '/dashboard/login',
@@ -98,6 +100,21 @@ const routes: SingleRoute[] = [
         path: '/dashboard/academix/category/:categoryId/edit',
         exact: true,
         component: UpsertCategory,
+      },
+      {
+        path: '/dashboard/fellowship/certificates',
+        exact: true,
+        component: Certificates,
+      },
+      {
+        path: '/dashboard/fellowship/certificate/add',
+        exact: true,
+        component: UpsertCertificate,
+      },
+      {
+        path: '/dashboard/fellowship/certificate/:id/edit',
+        exact: true,
+        component: UpsertCertificate,
       },
     ],
   },

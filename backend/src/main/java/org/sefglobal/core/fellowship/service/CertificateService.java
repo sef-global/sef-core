@@ -52,6 +52,22 @@ public class CertificateService {
     }
 
     /**
+     * Updates existing records of requested certificate
+     *
+     * @param id the id of the {@link Certificate} that needs to be updated
+     * @param certificate the updated data
+     * @return the updated {@link Certificate}
+     * @throws ResourceNotFoundException if a certificate with the requested id doesn't exist
+     */
+    public Certificate updateCertificate(Integer id, Certificate certificate) throws ResourceNotFoundException {
+        if (!certificateRepository.existsById(id)) {
+            String msg = "Couldn't find a certificate with id:" + id;
+            throw new ResourceNotFoundException(msg);
+        }
+        return certificateRepository.save(certificate);
+    }
+
+    /**
      * Deletes the certificate with the requested id
      *
      * @param id  the id to be searched and deleted
