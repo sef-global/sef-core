@@ -39,6 +39,10 @@
     margin-top: 12px;
 }
 
+.saveButton {
+    margin-top: 18px;
+}
+
 .formSelect {
     width: 100%;
 }
@@ -55,4 +59,19 @@
 
 .mainTitle {
     margin-top: 5px;
+}
+
+.closeButton {
+    position: absolute;
+    right: 0.8rem;
+}
+
+.addTranslation {
+    padding-left: 0;
+    margin-bottom: 1rem;
+}
+
+.cardMargin {
+    width: 100%;
+    margin-bottom: 1rem;
 }
