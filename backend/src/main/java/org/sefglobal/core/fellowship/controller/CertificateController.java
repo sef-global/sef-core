@@ -16,6 +16,7 @@ public class CertificateController {
         this.certificateService = certificateService;
     }
 
+    @CrossOrigin(origins = "https://sefglobal.org")
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Certificate getCertificateById(@PathVariable Integer id) throws ResourceNotFoundException{
