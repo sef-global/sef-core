@@ -44,5 +44,4 @@ build/
 
 .DS_Store
 
-application.properties
 configprops.properties
